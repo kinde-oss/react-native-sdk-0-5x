@@ -31,64 +31,29 @@ const chai = require('chai');
     var instance;
 
     beforeEach(function () {
-        instance = KindeReactNativeOAuth.KindeSDK;
+        instance = KindeReactNativeOAuth.Utils;
     });
-    describe('KindeSDK', function () {
-        describe('new KindeSDK', function () {
-            it('should instantiate ok', () => {
-                expect(instance).to.be.ok;
-            });
-
-            it('should return instance of KindeSDK class', function () {
-                const client = new instance(
-                    'https://test.kinde.com',
-                    'app://test.kinde.com/kinde_callback',
-                    'PKCE',
-                    'reg@live'
-                );
-                chai.expect(client).to.be.an.instanceof(instance);
+    describe('Utils', function () {
+        describe('generateRandomString', function () {
+            it('should return random string with 32 byte', function () {
+                assert.equal(instance.generateRandomString().length, 43);
             });
         });
-        describe('authorizationEndpoint', function () {
-            it('should return same authorization endpoint', function () {
-                const client = new instance(
-                    'https://test.kinde.com',
-                    'app://test.kinde.com/kinde_callback',
-                    'PKCE',
-                    'reg@live'
-                );
-                assert.equal(
-                    client.authorizationEndpoint,
-                    'https://test.kinde.com/oauth2/auth'
-                );
+        describe('generateChallenge', function () {
+            it('should return object challenge', function () {
+                chai.assert.hasAllKeys(instance.generateChallenge(), [
+                    'state',
+                    'codeVerifier',
+                    'codeChallenge'
+                ]);
             });
         });
-        describe('tokenEndpoint', function () {
-            it('should return same token endpoint', function () {
-                const client = new instance(
-                    'https://test.kinde.com',
-                    'app://test.kinde.com/kinde_callback',
-                    'PKCE',
-                    'reg@live'
-                );
-                assert.equal(
-                    client.tokenEndpoint,
-                    'https://test.kinde.com/oauth2/token'
-                );
+        describe('checkNotNull', function () {
+            it('should return same instance', function () {
+                assert.equal(instance.checkNotNull('test'), 'test');
             });
-        });
-        describe('logoutEndpoint', function () {
-            it('should return same logout endpoint', function () {
-                const client = new instance(
-                    'https://test.kinde.com',
-                    'app://test.kinde.com/kinde_callback',
-                    'PKCE',
-                    'reg@live'
-                );
-                assert.equal(
-                    client.logoutEndpoint,
-                    'https://test.kinde.com/logout'
-                );
+            it('should throw error', function () {
+                assert.throws(() => instance.checkNotNull(null));
             });
         });
     });
