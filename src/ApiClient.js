@@ -13,7 +13,7 @@
 
 
 import superagent from "superagent";
-import querystring from "querystring";
+import qs from "qs";
 import Storage from './SDK/Storage';
 
 /**
@@ -448,7 +448,7 @@ class ApiClient extends Storage {
         }
 
         if (contentType === 'application/x-www-form-urlencoded') {
-            request.send(querystring.stringify(this.normalizeParams(formParams)));
+            request.send(qs.stringify(this.normalizeParams(formParams)));
         } else if (contentType == 'multipart/form-data') {
             var _formParams = this.normalizeParams(formParams);
             for (var key in _formParams) {

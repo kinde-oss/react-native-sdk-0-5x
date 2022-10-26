@@ -15,7 +15,6 @@
 import ApiClient from './ApiClient';
 import KindeSDK from './SDK/KindeSDK';
 import Storage from './SDK/Storage';
-import GrantType from './SDK/GrantType';
 import Utils from './SDK/Utils';
 
 import User from './model/User';
@@ -67,12 +66,6 @@ export {
      * @property {module:KindeSDK}
      */
     KindeSDK,
-
-    /**
-     * The GrantType constructor.
-     * @property {module:GrantType}
-     */
-    GrantType,
 
     /**
      * The Storage constructor.

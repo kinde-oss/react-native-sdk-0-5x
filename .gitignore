@@ -70,6 +70,10 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+# Lock files
+package-lock.json
+yarn-lock.json
+
 # BUCK
 buck-out/
 \.buckd/
@@ -85,3 +89,6 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+
+# Dist
+dist

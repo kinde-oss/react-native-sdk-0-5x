@@ -1,30 +1,23 @@
 import { checkNotNull } from './Utils';
-import GrantType from './GrantType';
-import URL from 'url';
+import Url from 'url-parse';
 import { Linking } from 'react-native';
 import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
 
 export default class KindeSDK extends Storage {
-    constructor(issuer, redirectUrl, grantType, clientId, clientSecret, scope = 'openid offline') {
+    constructor(issuer, redirectUri, clientId, logoutRedirectUri, scope = 'openid offline') {
         super();
         this.issuer = issuer;
-        checkNotNull(this.issuer);
+        checkNotNull(this.issuer, 'Issuer');
 
         this.clientId = clientId;
-        checkNotNull(this.clientId);
+        checkNotNull(this.clientId, 'Client Id');
 
-        this.redirectUrl = redirectUrl;
-        checkNotNull(this.redirectUrl);
+        this.redirectUri = redirectUri;
+        checkNotNull(this.redirectUri, 'Redirect URI');
 
-        this.grantType = grantType;
-        checkNotNull(this.grantType);
-
-        this.clientSecret = clientSecret;
-
-        if (GrantType.PKCE !== this.grantType) {
-            checkNotNull(this.grantType);
-        }
+        this.logoutRedirectUri = logoutRedirectUri;
+        checkNotNull(this.logoutRedirectUri, 'Logout Redirect URI');
 
         this.scope = scope;
     }
@@ -32,28 +25,32 @@ export default class KindeSDK extends Storage {
     async login() {
         this.cleanUp();
         const auth = new AuthorizationCode();
-        const usePKCE = GrantType.PKCE === this.grantType;
-        return auth.login(this, usePKCE);
+        return auth.login(this, true);
     }
 
     getToken(url) {
+        checkNotNull(url, 'URL');
         return new Promise(async (resolve, reject) => {
-            const URLParsed = URL.parse(url, true);
-            const { code } = URLParsed.query
+            const URLParsed = Url(url, true);
+            const { code, error, error_description } = URLParsed.query;
+            checkNotNull(code, 'code');
+            if (error) {
+                const msg = error_description ? error_description : error;
+                throw new Error(msg);
+            }
             const formData = new FormData();
             formData.append('code', code);
             formData.append('client_id', this.clientId);
-            formData.append('client_secret', this.clientSecret);
+            formData.append('client_secret', null);
             formData.append('grant_type', 'authorization_code');
-            formData.append('redirect_uri', this.redirectUrl);
+            formData.append('redirect_uri', this.redirectUri);
             const state = await this.getState();
             if (state) {
                 formData.append('state', state);
             }
             const codeVerifier = await this.getCodeVerifier();
-            if (codeVerifier) {
-                formData.append('code_verifier', codeVerifier);
-            }
+            formData.append('code_verifier', codeVerifier);
+            checkNotNull(code, 'Code Verifier');
             const that = this;
             fetch(this.tokenEndpoint, {
                 method: 'POST',
@@ -75,12 +72,14 @@ export default class KindeSDK extends Storage {
 
     register() {
         const auth = new AuthorizationCode();
-        return auth.login(this, GrantType.PKCE === this.grantType, 'registration');
+        return auth.login(this, true, 'registration');
     }
 
     logout() {
         this.cleanUp();
-        Linking.openURL(this.logoutEndpoint);
+        const URLParsed = Url(this.logoutEndpoint, true);
+        URLParsed.query['redirect'] = this.logoutRedirectUri;
+        Linking.openURL(URLParsed.toString());
     }
 
     async cleanUp() {

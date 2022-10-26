@@ -46,12 +46,6 @@ To use the library locally without publishing to a remote npm registry, first in
 npm install
 ```
 
-Next, [link](https://docs.npmjs.com/cli/link) it globally in npm with the following, also from `JAVASCRIPT_CLIENT_DIR`:
-
-```shell
-npm link
-```
-
 To use this SDK, switch to the directory you want to use your KindeReactNativeOAuth from, and run:
 
 ```shell
@@ -64,45 +58,270 @@ If the library is hosted at a git repository, e.g.https://github.com/GIT_USER_ID
 then install it via:
 
 ```shell
-    npm install GIT_USER_ID/GIT_REPO_ID --save
+    npm install kinde-oss/react-native-sdk --save
 ```
 
 ## Getting Started
 
-##### The SDK provides 3 methods authentication:
+Please follow the [installation](#installation) instruction.
 
-- Authorization Code Flow
-- Authorization Code Flow with PKCE
+### Kinde configuration
+On the Kinde web app navigate to Settings in the left menu, then select App keys and find the Callbacks input field.
 
-Please follow the [installation](#installation) instruction and execute the following JS code:
+Here you want to put in the callback URLs for your React Native app, which should look something like this:
+
+- Allowed callback URLs - `myapp://myhost.kinde.com/kinde_callback`
+- Allowed logout redirect URLs - `myapp://myhost.kinde.com/kinde_callback`
+
+Make sure you press the Save button at the bottom of the page!
+
+Note: The `myapp://myhost.kinde.com/kinde_callback` is used as an example of local URL Scheme, change to the local local URL Scheme that you use.
+
+### Configuration Deep link
+
+If your app was launched from an external url registered to your app you can access and handle it from any component you want with:
+```javascript
+...
+import { ..., Linking, Platform, ... } from 'react-native';
+...
+
+componentDidMount() {
+  if (Platform.OS === 'ios') {
+    Linking.addEventListener('url', (event) => {
+      if (event.url) {
+        this.handleCallback(event.url);
+      }
+    })
+  } else {
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          this.handleCallback(url);
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
+  }
+}
+```
+
+#### iOS
+On iOS, you'll need to link `RCTLinking` to your project by following the steps described here. If you also want to listen to incoming app links during your app's execution, you'll need to add the following lines to your `AppDelegate.m`
+```swift
+// iOS 9.x or newer
+#import <React/RCTLinkingManager.h>
+
+- (BOOL)application:(UIApplication *)application
+   openURL:(NSURL *)url
+   options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
+}
+```
+If you're targeting iOS 8.x or older, you can use the following code instead:
+```swift
+// iOS 8.x or older
+#import <React/RCTLinkingManager.h>
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+  return [RCTLinkingManager application:application openURL:url
+                      sourceApplication:sourceApplication annotation:annotation];
+}
+```
+
+Please make sure you have configuration URL scheme in `Info.plist`, so app can be opened by deep link:
+
+```swift
+...
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>myapp</string> // you can change it
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>myapp</string> // you can change it
+    </array>
+  </dict>
+</array>
+...
+```
+
+#### Android
+Open `AndroidManifest.xml` and update your scheme:
+```xml
+<intent-filter>
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="myapp" android:host="test.kinde.com" />  // you can change it
+</intent-filter>
+```
+
+### Integration your app
+You’ll need to create a new instance of the Kinde Auth client object. Please execute this code below:
 
 ```javascript
 ...
-import {GrantType, KindeSDK, UserApi, ApiClient} from 'KindeReactNativeOAuth';
+import { KindeSDK } from 'KindeReactNativeOAuth';
 ...
 
 ...
 state = {
   ...
-  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_GRANT_TYPE_CHOOSEN, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_CLIENT_SECRET),
-  apiClient: new ApiClient(YOUR_KINDE_ISSUER)
+  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI)
+  ...
+}
+...
+```
+
+### Login / Register
+The Kinde client provides methods for an easy to implement login / register flow.
+As an example if you add buttons in your render as follows:
+```javascript
+<View style={{ flexDirection: 'row' }}>
+  <View>
+    <Button title="Sign In" onPress={this.handleSignIn} />
+  </View>
+  <View style={{ marginLeft: 10 }}>
+    <Button title="Sign Up" color="#000" onPress={this.handleSignUp} />
+  </View>
+</View>
+```
+Then define new functions that match for each button:
+***Note**: Make sure you've already defined KindeSDK as client in the state*
+```javascript
+...
+constructor() {
+  ...
+  this.handleSignUp = this.handleSignUp.bind(this);
+  this.handleSignIn = this.handleSignIn.bind(this);
+  ...
+}
+
+handleSignUp() {
+  this.state.client.register();
+}
+
+handleSignIn() {
+  this.state.client.login();
+}
+...
+```
+
+### Handle redirect
+Once your user is redirected back to your app from Kinde, using the getToken method to get token instance from Kinde
+```javascript
+...
+constructor() {
+  ...
+  this.handleCallback = this.handleCallback.bind(this);
+  ...
+}
+...
+componentWillMount() {
+  if (Platform.OS === 'ios') {
+    Linking.addEventListener('url', (event) => {
+      if (event.url) {
+        this.handleCallback(event.url);
+      }
+    })
+  } else {
+    Linking.getInitialURL()
+      .then((url) => {
+        if (url) {
+          this.handleCallback(url);
+        }
+      })
+      .catch((err) => console.error("An error occurred", err));
+  }
+}
+  
+handleCallback(url) {
+  this.state.client.getToken(url).then(() => {
+    console.log('Authenticated!!!');
+  });
+}
+```
+
+### Logout
+This is implemented in much the same way as logging in or registering. The Kinde SPA client comes with a logout method
+```javascript
+...
+constructor() {
+  ...
+  this.handleLogout = this.handleLogout.bind(this);
+  ...
+}
+...
+
+handleLogout() {
+  ...
+  this.state.client.logout();
+  ...
+}
+```
+
+### Get user information
+***Note warning:** Before you call the API, please make sure that you've already authenticated. If not, errors will appear there.*
+
+To access the user information, use the `UserApi, ApiClient` classes exported from `KindeReactNativeOAuth`, then call the `getUserProfile` method of `UserApi` instance
+```javascript
+...
+import { ..., UserApi, ApiClient, ... } from 'KindeReactNativeOAuth';
+...
+
+state = {
+  ...
+  apiClient: new ApiClient(YOUR_KINDE_ISSUER),
+  ...
+}
+...
+constructor() {
+  ...
+  this.getUserProfile = this.getUserProfile.bind(this);
   ...
 }
 ...
 
 
-const api = new UserApi(this.state.apiClient)
-const callback = function(error, data, response) {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
-};
-api.getUserProfile(callback);
-
+getUserProfile() {
+  const apiInstance = new UserApi(this.state.apiClient);
+  apiInstance.getUserProfile((err, data, response) => {
+    if (err) {
+      console.error(err)
+      return;
+    }
+    console.log(data);
+  })
+}
 ```
 
+### View users in Kinde
+If you navigate to the "Users" page within Kinde you will see your newly registered user there. 🚀
+
+### User Permissions
+Once a user has been verified as login in, your product/application will be returned the JWT token with an array of permissions for that user. You will need to configure your product/application to read permissions and unlock the respective functions.
+
+You set Permissions in your Kinde account (see help article), the below is an example set of permissions.
+
+```javascript
+const permissions = [ 
+  "create:todos",
+  "update:todos",
+  "read:todos",
+  "delete:todos",
+  "create:tasks",
+  "update:tasks",
+  "read:tasks",
+  "delete:tasks",
+]
+```
+
+If you need any assistance with getting Kinde connected reach out to us at support@kinde.com.
 ## Documentation for API Endpoints
 
 All URIs are relative to *https://app.kinde.com*

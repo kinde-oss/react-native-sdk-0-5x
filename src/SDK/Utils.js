@@ -26,9 +26,9 @@ function generateChallenge() {
     }
 }
 
-function checkNotNull(reference) {
+function checkNotNull(reference, name) {
     if (reference === null || reference === undefined) {
-        throw new Error('Reference cannot be empty');
+        throw new Error(`${name} cannot be empty`);
     }
     return reference;
 }
