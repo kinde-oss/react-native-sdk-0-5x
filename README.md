@@ -77,6 +77,23 @@ Make sure you press the Save button at the bottom of the page!
 
 Note: The `myapp://myhost.kinde.com/kinde_callback` is used as an example of local URL Scheme, change to the local local URL Scheme that you use.
 
+### Environments
+If you would like to use our Environments feature as part of your development process. You will need to create them first within your Kinde account. In this case you would use the Environment subdomain in the code block above.
+
+### Configuring your app
+#### Environment variables
+Put these variables in your .env file. You can find these variables on your Kinde Settings -> App keys page.
+- `KINDE_ISSUER_URL` - your Kinde domain
+- `KINDE_POST_CALLBACK_URL` - After the user authenticates we will callback to this address. Make sure this URL is under your allowed callback URLs
+- `KINDE_POST_LOGOUT_REDIRECT_URL` - where you want users to be redirected to after logging out. Make sure this URL is under your allowed logout redirect URLs
+- `KINDE_CLIENT_ID` - you can find this on the App Keys page
+
+```javascript
+KINDE_ISSUER_URL=https://your_kinde_domain.kinde.com
+KINDE_POST_CALLBACK_URL=myapp://myhost.kinde.com/kinde_callback
+KINDE_POST_LOGOUT_REDIRECT_URL=myapp://myhost.kinde.com/kinde_callback
+KINDE_CLIENT_ID=your_kinde_client_id
+```
 ### Configuration Deep link
 
 If your app was launched from an external url registered to your app you can access and handle it from any component you want with:
