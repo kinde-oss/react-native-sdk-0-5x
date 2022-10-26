@@ -11,28 +11,25 @@
  *
  */
 
-
-import ApiClient from "../ApiClient";
+import ApiClient from '../ApiClient';
 import UserProfile from '../model/UserProfile';
 
 /**
-* User service.
-* @module api/UserApi
-* @version 0.0.1
-*/
+ * User service.
+ * @module api/UserApi
+ * @version 0.0.1
+ */
 export default class UserApi {
-
     /**
-    * Constructs a new UserApi. 
-    * @alias module:api/UserApi
-    * @class
-    * @param {module:ApiClient} [apiClient] Optional API client implementation to use,
-    * default to {@link module:ApiClient#instance} if unspecified.
-    */
+     * Constructs a new UserApi.
+     * @alias module:api/UserApi
+     * @class
+     * @param {module:ApiClient} [apiClient] Optional API client implementation to use,
+     * default to {@link module:ApiClient#instance} if unspecified.
+     */
     constructor(apiClient) {
         this.apiClient = apiClient || ApiClient.instance;
     }
-
 
     /**
      * Callback function to receive the result of the getUserProfile operation.
@@ -44,32 +41,36 @@ export default class UserApi {
 
     /**
      * Returns current user profile
-     * Test 
+     * Test
      * @param {module:api/UserApi~getUserProfileCallback} callback The callback function, accepting three arguments: error, data, response
      * data is of type: {@link module:model/UserProfile}
      */
     getUserProfile(callback) {
-      let postBody = null;
+        let postBody = null;
 
-      let pathParams = {
-      };
-      let queryParams = {
-      };
-      let headerParams = {
-      };
-      let formParams = {
-      };
+        let pathParams = {};
+        let queryParams = {};
+        let headerParams = {};
+        let formParams = {};
 
-      let authNames = ['oauth'];
-      let contentTypes = [];
-      let accepts = ['application/json'];
-      let returnType = UserProfile;
-      return this.apiClient.callApi(
-        '/oauth2/user_profile', 'GET',
-        pathParams, queryParams, headerParams, formParams, postBody,
-        authNames, contentTypes, accepts, returnType, null, callback
-      );
+        let authNames = ['oauth'];
+        let contentTypes = [];
+        let accepts = ['application/json'];
+        let returnType = UserProfile;
+        return this.apiClient.callApi(
+            '/oauth2/user_profile',
+            'GET',
+            pathParams,
+            queryParams,
+            headerParams,
+            formParams,
+            postBody,
+            authNames,
+            contentTypes,
+            accepts,
+            returnType,
+            null,
+            callback
+        );
     }
-
-
 }

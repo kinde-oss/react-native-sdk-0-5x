@@ -23,8 +23,7 @@ class User {
      * Constructs a new <code>User</code>.
      * @alias module:model/User
      */
-    constructor() { 
-        
+    constructor() {
         User.initialize(this);
     }
 
@@ -33,8 +32,7 @@ class User {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj) { 
-    }
+    static initialize(obj) {}
 
     /**
      * Constructs a <code>User</code> from a plain JavaScript object, optionally creating a new instance.
@@ -54,22 +52,32 @@ class User {
                 obj['email'] = ApiClient.convertToType(data['email'], 'String');
             }
             if (data.hasOwnProperty('full_name')) {
-                obj['full_name'] = ApiClient.convertToType(data['full_name'], 'String');
+                obj['full_name'] = ApiClient.convertToType(
+                    data['full_name'],
+                    'String'
+                );
             }
             if (data.hasOwnProperty('last_name')) {
-                obj['last_name'] = ApiClient.convertToType(data['last_name'], 'String');
+                obj['last_name'] = ApiClient.convertToType(
+                    data['last_name'],
+                    'String'
+                );
             }
             if (data.hasOwnProperty('first_name')) {
-                obj['first_name'] = ApiClient.convertToType(data['first_name'], 'String');
+                obj['first_name'] = ApiClient.convertToType(
+                    data['first_name'],
+                    'String'
+                );
             }
             if (data.hasOwnProperty('is_suspended')) {
-                obj['is_suspended'] = ApiClient.convertToType(data['is_suspended'], 'Boolean');
+                obj['is_suspended'] = ApiClient.convertToType(
+                    data['is_suspended'],
+                    'Boolean'
+                );
             }
         }
         return obj;
     }
-
-
 }
 
 /**
@@ -102,10 +110,4 @@ User.prototype['first_name'] = undefined;
  */
 User.prototype['is_suspended'] = undefined;
 
-
-
-
-
-
 export default User;
-

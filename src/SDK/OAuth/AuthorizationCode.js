@@ -19,13 +19,13 @@ export default class AuthorizationCode extends Storage {
 
         const stateGenerated = generateRandomString();
         URLParsed.query['state'] = stateGenerated;
-        await this.setState(stateGenerated)
+        await this.setState(stateGenerated);
         if (usePKCE) {
             const challenge = generateChallenge();
             URLParsed.query['code_challenge'] = challenge.codeChallenge;
             URLParsed.query['code_challenge_method'] = 'S256';
-            await this.setCodeVerifier(challenge.codeVerifier)
+            await this.setCodeVerifier(challenge.codeVerifier);
         }
         Linking.openURL(URLParsed.toString());
     }
-};
+}

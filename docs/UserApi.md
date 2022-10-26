@@ -2,11 +2,9 @@
 
 All URIs are relative to *https://app.kinde.com*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**getUserProfile**](UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile
-
-
+| Method                                          | HTTP request                 | Description                  |
+| ----------------------------------------------- | ---------------------------- | ---------------------------- |
+| [**getUserProfile**](UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile |
 
 ## getUserProfile
 
@@ -14,7 +12,7 @@ Method | HTTP request | Description
 
 Returns current user profile
 
-Test 
+Test
 
 ### Example
 
@@ -27,11 +25,11 @@ oauth.accessToken = 'YOUR ACCESS TOKEN';
 
 let apiInstance = new KindeReactNativeOAuth.UserApi();
 apiInstance.getUserProfile((error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
+    if (error) {
+        console.error(error);
+    } else {
+        console.log('API called successfully. Returned data: ' + data);
+    }
 });
 ```
 
@@ -49,6 +47,5 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
+-   **Content-Type**: Not defined
+-   **Accept**: application/json

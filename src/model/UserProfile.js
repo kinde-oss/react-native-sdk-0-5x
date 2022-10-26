@@ -23,8 +23,7 @@ class UserProfile {
      * Constructs a new <code>UserProfile</code>.
      * @alias module:model/UserProfile
      */
-    constructor() { 
-        
+    constructor() {
         UserProfile.initialize(this);
     }
 
@@ -33,8 +32,7 @@ class UserProfile {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj) { 
-    }
+    static initialize(obj) {}
 
     /**
      * Constructs a <code>UserProfile</code> from a plain JavaScript object, optionally creating a new instance.
@@ -51,19 +49,26 @@ class UserProfile {
                 obj['id'] = ApiClient.convertToType(data['id'], 'String');
             }
             if (data.hasOwnProperty('preferred_email')) {
-                obj['preferred_email'] = ApiClient.convertToType(data['preferred_email'], 'String');
+                obj['preferred_email'] = ApiClient.convertToType(
+                    data['preferred_email'],
+                    'String'
+                );
             }
             if (data.hasOwnProperty('last_name')) {
-                obj['last_name'] = ApiClient.convertToType(data['last_name'], 'String');
+                obj['last_name'] = ApiClient.convertToType(
+                    data['last_name'],
+                    'String'
+                );
             }
             if (data.hasOwnProperty('first_name')) {
-                obj['first_name'] = ApiClient.convertToType(data['first_name'], 'String');
+                obj['first_name'] = ApiClient.convertToType(
+                    data['first_name'],
+                    'String'
+                );
             }
         }
         return obj;
     }
-
-
 }
 
 /**
@@ -86,10 +91,4 @@ UserProfile.prototype['last_name'] = undefined;
  */
 UserProfile.prototype['first_name'] = undefined;
 
-
-
-
-
-
 export default UserProfile;
-

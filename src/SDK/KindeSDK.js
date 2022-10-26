@@ -5,7 +5,13 @@ import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
 
 export default class KindeSDK extends Storage {
-    constructor(issuer, redirectUri, clientId, logoutRedirectUri, scope = 'openid offline') {
+    constructor(
+        issuer,
+        redirectUri,
+        clientId,
+        logoutRedirectUri,
+        scope = 'openid offline'
+    ) {
         super();
         this.issuer = issuer;
         checkNotNull(this.issuer, 'Issuer');
@@ -58,16 +64,19 @@ export default class KindeSDK extends Storage {
                     'Content-Type': 'multipart/form-data'
                 },
                 body: formData
-            }).then((response) => response.json()).then(async (responseJson) => {
-                if (responseJson.error) {
-                    return reject(responseJson);
-                }
-                await that.setAccessToken(responseJson.access_token);
-                resolve(responseJson);
-            }).catch((err) => {
-                reject(err.response.data);
             })
-        })
+                .then((response) => response.json())
+                .then(async (responseJson) => {
+                    if (responseJson.error) {
+                        return reject(responseJson);
+                    }
+                    await that.setAccessToken(responseJson.access_token);
+                    resolve(responseJson);
+                })
+                .catch((err) => {
+                    reject(err.response.data);
+                });
+        });
     }
 
     register() {
@@ -83,7 +92,11 @@ export default class KindeSDK extends Storage {
     }
 
     async cleanUp() {
-        await Promise.all(this.setState(null), this.setAccessToken(null), this.setCodeVerifier(null));
+        await Promise.all(
+            this.setState(null),
+            this.setAccessToken(null),
+            this.setCodeVerifier(null)
+        );
     }
 
     get authorizationEndpoint() {
