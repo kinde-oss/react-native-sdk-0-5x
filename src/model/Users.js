@@ -24,8 +24,7 @@ class Users {
      * Constructs a new <code>Users</code>.
      * @alias module:model/Users
      */
-    constructor() { 
-        
+    constructor() {
         Users.initialize(this);
     }
 
@@ -34,8 +33,7 @@ class Users {
      * This method is used by the constructors of any subclasses, in order to implement multiple inheritance (mix-ins).
      * Only for internal use.
      */
-    static initialize(obj) { 
-    }
+    static initialize(obj) {}
 
     /**
      * Constructs a <code>Users</code> from a plain JavaScript object, optionally creating a new instance.
@@ -52,13 +50,14 @@ class Users {
                 obj['users'] = ApiClient.convertToType(data['users'], [User]);
             }
             if (data.hasOwnProperty('next_token')) {
-                obj['next_token'] = ApiClient.convertToType(data['next_token'], 'String');
+                obj['next_token'] = ApiClient.convertToType(
+                    data['next_token'],
+                    'String'
+                );
             }
         }
         return obj;
     }
-
-
 }
 
 /**
@@ -71,10 +70,4 @@ Users.prototype['users'] = undefined;
  */
 Users.prototype['next_token'] = undefined;
 
-
-
-
-
-
 export default Users;
-

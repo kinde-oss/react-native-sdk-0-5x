@@ -11,58 +11,50 @@
  *
  */
 
+var assert = require('assert');
+const chai = require('chai');
 
- var assert = require('assert');
- const chai = require('chai');
-
- (function(root, factory) {
+(function (root, factory) {
     if (typeof define === 'function' && define.amd) {
-      // AMD.
-      define(['expect.js', process.cwd()+'/src/index'], factory);
+        // AMD.
+        define(['expect.js', process.cwd() + '/src/index'], factory);
     } else if (typeof module === 'object' && module.exports) {
-      // CommonJS-like environments that support module.exports, like Node.
-      factory(require('expect.js'), require(process.cwd()+'/src/index'));
+        // CommonJS-like environments that support module.exports, like Node.
+        factory(require('expect.js'), require(process.cwd() + '/src/index'));
     } else {
-      // Browser globals (root is window)
-      factory(root.expect, root.KindeReactNativeOAuth);
+        // Browser globals (root is window)
+        factory(root.expect, root.KindeReactNativeOAuth);
     }
-  }(this, function(expect, KindeReactNativeOAuth) {
+})(this, function (expect, KindeReactNativeOAuth) {
     'use strict';
 
     var instance;
-  
-    beforeEach(function() {
-      instance = KindeReactNativeOAuth.KindeSDK;
+
+    beforeEach(function () {
+        instance = KindeReactNativeOAuth.Utils;
     });
-    describe('KindeSDK', function() {
-      describe('new KindeSDK', function() {
-        it('should instantiate ok', () => {
-          expect(instance).to.be.ok;
+    describe('Utils', function () {
+        describe('generateRandomString', function () {
+            it('should return random string with 32 byte', function () {
+                assert.equal(instance.generateRandomString().length, 43);
+            });
         });
-      
-        it('should return instance of KindeSDK class', function() {
-          const client = new instance('https://test.kinde.com', 'app://test.kinde.com/kinde_callback', 'PKCE', 'reg@live');
-          chai.expect(client).to.be.an.instanceof(instance)
+        describe('generateChallenge', function () {
+            it('should return object challenge', function () {
+                chai.assert.hasAllKeys(instance.generateChallenge(), [
+                    'state',
+                    'codeVerifier',
+                    'codeChallenge'
+                ]);
+            });
         });
-      });
-      describe('authorizationEndpoint', function() {
-        it('should return same authorization endpoint', function() {
-          const client = new instance('https://test.kinde.com', 'app://test.kinde.com/kinde_callback', 'PKCE', 'reg@live');
-          assert.equal(client.authorizationEndpoint,'https://test.kinde.com/oauth2/auth')
+        describe('checkNotNull', function () {
+            it('should return same instance', function () {
+                assert.equal(instance.checkNotNull('test'), 'test');
+            });
+            it('should throw error', function () {
+                assert.throws(() => instance.checkNotNull(null));
+            });
         });
-      });
-      describe('tokenEndpoint', function() {
-        it('should return same token endpoint', function() {
-          const client = new instance('https://test.kinde.com', 'app://test.kinde.com/kinde_callback', 'PKCE', 'reg@live');
-          assert.equal(client.tokenEndpoint,'https://test.kinde.com/oauth2/token')
-        });
-      });
-      describe('logoutEndpoint', function() {
-        it('should return same logout endpoint', function() {
-          const client = new instance('https://test.kinde.com', 'app://test.kinde.com/kinde_callback', 'PKCE', 'reg@live');
-          assert.equal(client.logoutEndpoint,'https://test.kinde.com/logout')
-        });
-      });
     });
-  }));
-  
+});
