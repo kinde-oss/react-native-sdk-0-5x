@@ -95,8 +95,8 @@ Put these variables in your .env file. You can find these variables on your Kind
 
 ```javascript
 KINDE_ISSUER_URL=https://your_kinde_domain.kinde.com
-KINDE_POST_CALLBACK_URL=myapp://myhost.kinde.com/kinde_callback
-KINDE_POST_LOGOUT_REDIRECT_URL=myapp://myhost.kinde.com/kinde_callback
+KINDE_POST_CALLBACK_URL=myapp://your_kinde_domain.kinde.com/kinde_callback
+KINDE_POST_LOGOUT_REDIRECT_URL=myapp://your_kinde_domain.kinde.com/kinde_callback
 KINDE_CLIENT_ID=your_kinde_client_id
 ```
 
@@ -187,7 +187,7 @@ Open `AndroidManifest.xml` and update your scheme:
     <action android:name="android.intent.action.VIEW" />
     <category android:name="android.intent.category.DEFAULT" />
     <category android:name="android.intent.category.BROWSABLE" />
-    <data android:scheme="myapp" android:host="test.kinde.com" />  // you can change it
+    <data android:scheme="myapp" android:host="your_kinde_issuer.kinde.com" />  // you can change it
 </intent-filter>
 ```
 
