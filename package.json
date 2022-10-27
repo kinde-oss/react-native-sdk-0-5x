@@ -7,7 +7,7 @@
     "scripts": {
         "build": "babel src -d dist",
         "prepare": "npm run build && husky install",
-        "test": "mocha --require @babel/register --recursive"
+        "test": "jest --no-watchman"
     },
     "browser": {
         "fs": false
@@ -40,18 +40,18 @@
         "@babel/plugin-syntax-import-meta": "^7.0.0",
         "@babel/preset-env": "^7.0.0",
         "@babel/register": "^7.0.0",
-        "chai": "^4.3.6",
+        "babel-core": "^7.0.0-bridge.0",
+        "babel-jest": "23.6.0",
         "eslint": "^8.26.0",
         "eslint-config-prettier": "^8.5.0",
-        "expect.js": "^0.3.1",
         "husky": "^8.0.1",
+        "jest": "23.6.0",
         "lint-staged": "^13.0.3",
         "metro-react-native-babel-preset": "^0.73.2",
-        "mocha": "^8.0.1",
         "prettier": "^2.7.1",
         "react": "16.0.0",
         "react-native": "0.50",
-        "sinon": "^7.2.0"
+        "react-test-renderer": "16.0.0"
     },
     "peerDependencies": {
         "react-native": "^0.0.0-0 || 0.50 - 0.59 || 1000.0.0"
@@ -64,5 +64,8 @@
             "npx prettier --write .",
             "npx eslint --fix"
         ]
+    },
+    "jest": {
+        "preset": "react-native"
     }
 }
