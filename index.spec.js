@@ -14,6 +14,11 @@ global.fetch = jest.fn(() =>
     })
 );
 
+function FormDataMock() {
+    this.append = jest.fn();
+}
+
+global.FormData = FormDataMock;
 const configuration = {
     issuer: 'https://myhost.kinde.com',
     redirectUri: 'myapp://myhost.kinde.com/kinde_callback',

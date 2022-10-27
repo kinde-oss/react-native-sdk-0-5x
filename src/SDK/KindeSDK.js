@@ -1,5 +1,5 @@
 import { checkNotNull } from './Utils';
-import Url, { qs } from 'url-parse';
+import Url from 'url-parse';
 import { Linking } from 'react-native';
 import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
@@ -26,6 +26,8 @@ export default class KindeSDK extends Storage {
         checkNotNull(this.logoutRedirectUri, 'Logout Redirect URI');
 
         this.scope = scope;
+
+        this.clientSecret = '';
     }
 
     async login() {
@@ -45,27 +47,27 @@ export default class KindeSDK extends Storage {
                     const msg = error_description ? error_description : error;
                     reject(msg);
                 }
-                const formData = {
-                    code,
-                    client_id: this.clientId,
-                    client_secret: null,
-                    grant_type: 'authorization_code',
-                    redirect_uri: this.redirectUri
-                };
+                const formData = new FormData();
+                formData.append('code', code);
+                formData.append('client_id', this.clientId);
+                formData.append('client_secret', this.clientSecret);
+                formData.append('grant_type', 'authorization_code');
+                formData.append('redirect_uri', this.redirectUri);
                 const state = await this.getState();
                 if (state) {
-                    formData['state'] = state;
+                    formData.append('state', state);
                 }
                 const codeVerifier = await this.getCodeVerifier();
-                formData['code_verifier'] = codeVerifier;
-                checkNotNull(code, 'Code Verifier');
+                if (codeVerifier) {
+                    formData.append('code_verifier', codeVerifier);
+                }
                 const that = this;
                 fetch(this.tokenEndpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
-                    body: qs.stringify(formData)
+                    body: formData
                 })
                     .then((response) => response.json())
                     .then(async (responseJson) => {
