@@ -91,8 +91,8 @@ export default class KindeSDK extends Storage {
         return auth.login(this, true, 'registration');
     }
 
-    logout() {
-        this.cleanUp();
+    async logout() {
+        await this.cleanUp();
         const URLParsed = Url(this.logoutEndpoint, true);
         URLParsed.query['redirect'] = this.logoutRedirectUri;
         Linking.openURL(URLParsed.toString());
