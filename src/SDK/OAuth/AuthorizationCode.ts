@@ -2,12 +2,18 @@ import { Linking } from 'react-native';
 import Url from 'url-parse';
 import Storage from '../Storage';
 import { generateChallenge, generateRandomString } from '../Utils';
+import KindeSDK from '../KindeSDK';
 
-export default class AuthorizationCode extends Storage {
+class AuthorizationCode extends Storage {
     constructor() {
         super();
     }
-    async login(kindSDK, usePKCE = false, startPage = 'login') {
+
+    async login(
+        kindSDK: KindeSDK,
+        usePKCE: boolean = false,
+        startPage: 'login' | 'registration' = 'login'
+    ): Promise<void> {
         const URLParsed = Url(kindSDK.authorizationEndpoint, true);
         URLParsed.query['client_id'] = kindSDK.clientId;
         URLParsed.query['redirect_uri'] = kindSDK.redirectUri;
@@ -29,3 +35,5 @@ export default class AuthorizationCode extends Storage {
         Linking.openURL(URLParsed.toString());
     }
 }
+
+export default AuthorizationCode;

@@ -4,13 +4,20 @@ import { Linking } from 'react-native';
 import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
 
-export default class KindeSDK extends Storage {
+class KindeSDK extends Storage {
+    public issuer: string;
+    public redirectUri: string;
+    public clientId: string;
+    public logoutRedirectUri: string;
+    public scope: string;
+    public clientSecret?: string;
+
     constructor(
-        issuer,
-        redirectUri,
-        clientId,
-        logoutRedirectUri,
-        scope = 'openid offline'
+        issuer: string,
+        redirectUri: string,
+        clientId: string,
+        logoutRedirectUri: string,
+        scope: string = 'openid offline'
     ) {
         super();
         this.issuer = issuer;
@@ -30,13 +37,13 @@ export default class KindeSDK extends Storage {
         this.clientSecret = '';
     }
 
-    async login() {
+    async login(): Promise<void> {
         await this.cleanUp();
         const auth = new AuthorizationCode();
         return auth.login(this, true);
     }
 
-    getToken(url) {
+    getToken(url: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
                 checkNotNull(url, 'URL');
@@ -86,7 +93,7 @@ export default class KindeSDK extends Storage {
         });
     }
 
-    register() {
+    register(): Promise<void> {
         const auth = new AuthorizationCode();
         return auth.login(this, true, 'registration');
     }
@@ -98,7 +105,7 @@ export default class KindeSDK extends Storage {
         Linking.openURL(URLParsed.toString());
     }
 
-    async cleanUp() {
+    async cleanUp(): Promise<void[]> {
         return Promise.all([
             this.setState(''),
             this.setAccessToken(''),
@@ -106,15 +113,17 @@ export default class KindeSDK extends Storage {
         ]);
     }
 
-    get authorizationEndpoint() {
+    get authorizationEndpoint(): string {
         return `${this.issuer}/oauth2/auth`;
     }
 
-    get tokenEndpoint() {
+    get tokenEndpoint(): string {
         return `${this.issuer}/oauth2/token`;
     }
 
-    get logoutEndpoint() {
+    get logoutEndpoint(): string {
         return `${this.issuer}/logout`;
     }
 }
+
+export default KindeSDK;
