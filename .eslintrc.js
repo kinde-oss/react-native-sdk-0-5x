@@ -13,6 +13,7 @@ module.exports = {
         ecmaVersion: 13,
         sourceType: 'module'
     },
+    parser: '@babel/eslint-parser',
     plugins: [],
     rules: {
         'no-prototype-builtins': 'off',

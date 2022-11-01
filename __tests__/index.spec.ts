@@ -1,4 +1,5 @@
-const { KindeSDK, ApiClient, UserApi } = require(process.cwd() + '/src/index');
+// @ts-nocheck
+const { KindeSDK, UserApi } = require(process.cwd() + '/src/index');
 import { Linking } from 'react-native';
 import Url from 'url-parse';
 
@@ -51,7 +52,7 @@ jest.mock('AsyncStorage', () => ({
     setItem: jest.fn()
 }));
 
-jest.mock('./src/SDK/Utils', () => ({
+jest.mock(process.cwd() + '/src/SDK/Utils', () => ({
     generateChallenge: jest.fn().mockReturnValue({
         state: 'uUj8nEDL-jxeDbS_si86i7UsFmG5ewf0axDu96pdHGc',
         codeVerifier: 'K9E0HqVA4oxGuJqFWoasgmGKzI3Uxehdr9nTF2jaLR8',
@@ -254,9 +255,10 @@ describe('KindeSDK', () => {
     });
     describe('User Profile', () => {
         test('Get User Profile', async () => {
-            const apiClient = new ApiClient(configuration.issuer);
-            const apiInstance = new UserApi(apiClient);
-            jest.spyOn(apiClient, 'callApi').mockImplementation(() => {
+            const apiInstance = new UserApi({
+                basePath: configuration.issuer
+            });
+            jest.spyOn(apiInstance, 'getUserProfile').mockImplementation(() => {
                 return {
                     id: 'kp:58ece9f68a7c4c098efc1cf45c774e16',
                     last_name: 'test',
@@ -265,7 +267,7 @@ describe('KindeSDK', () => {
                     preferred_email: 'usertesting@yopmail.com'
                 };
             });
-            await expect(apiInstance.getUserProfile()).toEqual(fakeUserProfile);
+            expect(apiInstance.getUserProfile()).toEqual(fakeUserProfile);
         });
     });
 });
