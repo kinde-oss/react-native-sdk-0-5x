@@ -12,10 +12,10 @@
  */
 
 import KindeSDK from './SDK/KindeSDK';
-import Storage from './SDK/Storage';
+import { sessionStorage } from './SDK/Storage';
 
 export * from './ApiClient';
 export * from './apis';
 export * from './models';
 export * from './SDK/Utils';
-export { KindeSDK, Storage };
+export { KindeSDK, sessionStorage };

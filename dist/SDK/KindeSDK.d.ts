@@ -1,5 +1,4 @@
-import Storage from './Storage';
-declare class KindeSDK extends Storage {
+declare class KindeSDK {
     issuer: string;
     redirectUri: string;
     clientId: string;

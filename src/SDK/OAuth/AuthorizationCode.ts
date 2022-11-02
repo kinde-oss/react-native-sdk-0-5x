@@ -1,14 +1,10 @@
 import { Linking } from 'react-native';
 import Url from 'url-parse';
-import Storage from '../Storage';
 import { generateChallenge, generateRandomString } from '../Utils';
 import KindeSDK from '../KindeSDK';
+import { sessionStorage } from '../Storage';
 
-class AuthorizationCode extends Storage {
-    constructor() {
-        super();
-    }
-
+class AuthorizationCode {
     async login(
         kindSDK: KindeSDK,
         usePKCE: boolean = false,
@@ -25,12 +21,12 @@ class AuthorizationCode extends Storage {
 
         const stateGenerated = generateRandomString();
         URLParsed.query['state'] = stateGenerated;
-        await this.setState(stateGenerated);
+        await sessionStorage.setState(stateGenerated);
         if (usePKCE) {
             const challenge = generateChallenge();
             URLParsed.query['code_challenge'] = challenge.codeChallenge;
             URLParsed.query['code_challenge_method'] = 'S256';
-            await this.setCodeVerifier(challenge.codeVerifier);
+            await sessionStorage.setCodeVerifier(challenge.codeVerifier);
         }
         Linking.openURL(URLParsed.toString());
     }

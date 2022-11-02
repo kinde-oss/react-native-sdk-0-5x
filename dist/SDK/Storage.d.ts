@@ -1,4 +1,6 @@
-declare class Storage {
+import Store from './store';
+declare class Storage extends Store {
+    constructor();
     getAccessToken(): Promise<string | null>;
     setAccessToken(newAccessToken: string): Promise<void>;
     getState(): Promise<string | null>;
@@ -7,4 +9,5 @@ declare class Storage {
     setCodeVerifier(newCodeVerifier: string): Promise<void>;
     convertString(str: string | object): string;
 }
-export default Storage;
+declare const sessionStorage: Storage;
+export { Storage, sessionStorage };
