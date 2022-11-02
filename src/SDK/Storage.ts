@@ -1,31 +1,31 @@
-import { AsyncStorage } from 'react-native';
+import Store from './store';
 
-class Storage {
-    async getAccessToken(): Promise<string | null> {
-        return AsyncStorage.getItem('accessToken');
+class Storage extends Store {
+    constructor() {
+        super();
+    }
+    getAccessToken(): string | undefined {
+        return this.getItem('accessToken');
     }
 
-    async setAccessToken(newAccessToken: string): Promise<void> {
-        return AsyncStorage.setItem(
-            'accessToken',
-            this.convertString(newAccessToken)
-        );
+    setAccessToken(newAccessToken: string): void {
+        return this.setItem('accessToken', this.convertString(newAccessToken));
     }
 
-    async getState(): Promise<string | null> {
-        return AsyncStorage.getItem('state');
+    getState(): string | undefined {
+        return this.getItem('state');
     }
 
-    async setState(newState: string): Promise<void> {
-        return AsyncStorage.setItem('state', this.convertString(newState));
+    setState(newState: string): void {
+        return this.setItem('state', this.convertString(newState));
     }
 
-    async getCodeVerifier(): Promise<string | null> {
-        return AsyncStorage.getItem('codeVerifier');
+    getCodeVerifier(): string | undefined {
+        return this.getItem('codeVerifier');
     }
 
-    async setCodeVerifier(newCodeVerifier: string): Promise<void> {
-        return AsyncStorage.setItem(
+    setCodeVerifier(newCodeVerifier: string): void {
+        return this.setItem(
             'codeVerifier',
             this.convertString(newCodeVerifier)
         );
@@ -36,4 +36,7 @@ class Storage {
     }
 }
 
-export default Storage;
+const sessionStorage = (globalThis.sessionStorage =
+    globalThis.sessionStorage ?? new Storage()) as Storage;
+
+export { Storage, sessionStorage };

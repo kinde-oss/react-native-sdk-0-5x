@@ -1,10 +1,10 @@
 import { checkNotNull } from './Utils';
 import Url from 'url-parse';
 import { Linking } from 'react-native';
-import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
+import { sessionStorage } from './Storage';
 
-class KindeSDK extends Storage {
+class KindeSDK {
     public issuer: string;
     public redirectUri: string;
     public clientId: string;
@@ -19,7 +19,6 @@ class KindeSDK extends Storage {
         logoutRedirectUri: string,
         scope: string = 'openid offline'
     ) {
-        super();
         this.issuer = issuer;
         checkNotNull(this.issuer, 'Issuer');
 
@@ -60,15 +59,14 @@ class KindeSDK extends Storage {
                 formData.append('client_secret', this.clientSecret);
                 formData.append('grant_type', 'authorization_code');
                 formData.append('redirect_uri', this.redirectUri);
-                const state = await this.getState();
+                const state = await sessionStorage.getState();
                 if (state) {
                     formData.append('state', state);
                 }
-                const codeVerifier = await this.getCodeVerifier();
+                const codeVerifier = await sessionStorage.getCodeVerifier();
                 if (codeVerifier) {
                     formData.append('code_verifier', codeVerifier);
                 }
-                const that = this;
                 fetch(this.tokenEndpoint, {
                     method: 'POST',
                     headers: {
@@ -81,7 +79,9 @@ class KindeSDK extends Storage {
                         if (responseJson.error) {
                             return reject(responseJson);
                         }
-                        await that.setAccessToken(responseJson.access_token);
+                        await sessionStorage.setAccessToken(
+                            responseJson.access_token
+                        );
                         resolve(responseJson);
                     })
                     .catch((err) => {
@@ -107,9 +107,9 @@ class KindeSDK extends Storage {
 
     async cleanUp(): Promise<void[]> {
         return Promise.all([
-            this.setState(''),
-            this.setAccessToken(''),
-            this.setCodeVerifier('')
+            sessionStorage.setState(''),
+            sessionStorage.setAccessToken(''),
+            sessionStorage.setCodeVerifier('')
         ]);
     }
 

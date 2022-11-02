@@ -13,7 +13,8 @@
  *
  */
 
-import Storage from './SDK/Storage';
+import { sessionStorage } from './SDK/Storage';
+
 export const BASE_PATH = 'https://app.kinde.com'.replace(/\/+$/, '');
 
 export interface ConfigurationParameters {
@@ -137,8 +138,7 @@ export class BaseAPI {
             context,
             initOverrides
         );
-        const storage = new Storage();
-        const accessToken = await storage.getAccessToken();
+        const accessToken = await sessionStorage.getAccessToken();
         const response = await this.fetchApi(url, {
             ...init,
             headers: {

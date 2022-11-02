@@ -40,8 +40,6 @@ export class UserApi extends runtime.BaseAPI {
                     'openid'
                 ]);
         }
-        console.log('come', initOverrides);
-
         const response = await this.request(
             {
                 path: `/oauth2/user_profile`,
