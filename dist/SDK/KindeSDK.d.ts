@@ -10,7 +10,7 @@ declare class KindeSDK {
     getToken(url: string): Promise<void>;
     register(): Promise<void>;
     logout(): Promise<void>;
-    cleanUp(): Promise<void[]>;
+    cleanUp(): void;
     get authorizationEndpoint(): string;
     get tokenEndpoint(): string;
     get logoutEndpoint(): string;

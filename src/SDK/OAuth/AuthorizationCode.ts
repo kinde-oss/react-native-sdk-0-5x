@@ -21,12 +21,12 @@ class AuthorizationCode {
 
         const stateGenerated = generateRandomString();
         URLParsed.query['state'] = stateGenerated;
-        await sessionStorage.setState(stateGenerated);
+        sessionStorage.setState(stateGenerated);
         if (usePKCE) {
             const challenge = generateChallenge();
             URLParsed.query['code_challenge'] = challenge.codeChallenge;
             URLParsed.query['code_challenge_method'] = 'S256';
-            await sessionStorage.setCodeVerifier(challenge.codeVerifier);
+            sessionStorage.setCodeVerifier(challenge.codeVerifier);
         }
         Linking.openURL(URLParsed.toString());
     }
