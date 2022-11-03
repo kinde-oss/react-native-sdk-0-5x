@@ -1,4 +1,4 @@
-class Store {
+class BaseStore {
     private data: Map<string, string>;
 
     constructor() {
@@ -25,4 +25,4 @@ class Store {
         this.data = new Map<string, string>();
     }
 }
-export default Store;
+export default BaseStore;

@@ -1,6 +1,6 @@
-import Store from './store';
+import BaseStore from './Base';
 
-class Storage extends Store {
+class Storage extends BaseStore {
     constructor() {
         super();
     }
