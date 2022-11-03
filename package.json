@@ -1,6 +1,6 @@
 {
     "name": "KindeReactNativeOAuth",
-    "version": "0.0.1",
+    "version": "0.1.1",
     "description": "Provides_endpoints_to_manage_your_Kinde_Businesses",
     "license": "Unlicense",
     "main": "dist/index.js",
