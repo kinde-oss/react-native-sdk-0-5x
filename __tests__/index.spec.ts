@@ -47,11 +47,6 @@ jest.mock('Linking', () => ({
     removeEventListener: jest.fn()
 }));
 
-jest.mock('AsyncStorage', () => ({
-    getItem: jest.fn().mockReturnValue('random_value'),
-    setItem: jest.fn()
-}));
-
 jest.mock(process.cwd() + '/src/SDK/Utils', () => ({
     generateChallenge: jest.fn().mockReturnValue({
         state: 'uUj8nEDL-jxeDbS_si86i7UsFmG5ewf0axDu96pdHGc',

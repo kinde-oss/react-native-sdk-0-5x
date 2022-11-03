@@ -11,8 +11,9 @@
  *
  */
 import KindeSDK from './SDK/KindeSDK';
+import { sessionStorage as Storage } from './SDK/Storage';
 export * from './ApiClient';
 export * from './apis';
 export * from './models';
 export * from './SDK/Utils';
-export { KindeSDK };
+export { KindeSDK, Storage };

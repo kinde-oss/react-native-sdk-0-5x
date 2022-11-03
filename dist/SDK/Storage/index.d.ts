@@ -1,5 +1,5 @@
-import Store from './store';
-declare class Storage extends Store {
+import BaseStore from './Base';
+declare class Storage extends BaseStore {
     constructor();
     getAccessToken(): string | undefined;
     setAccessToken(newAccessToken: string): void;

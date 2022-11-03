@@ -1,4 +1,4 @@
-declare class Store {
+declare class BaseStore {
     private data;
     constructor();
     getItem(key: string): string | undefined;
@@ -7,4 +7,4 @@ declare class Store {
     removeItem(key: string): void;
     clear(): void;
 }
-export default Store;
+export default BaseStore;
