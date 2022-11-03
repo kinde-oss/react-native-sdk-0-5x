@@ -37,7 +37,7 @@ class KindeSDK {
     }
 
     async login(): Promise<void> {
-        await this.cleanUp();
+        this.cleanUp();
         const auth = new AuthorizationCode();
         return auth.login(this, true);
     }
@@ -59,11 +59,11 @@ class KindeSDK {
                 formData.append('client_secret', this.clientSecret);
                 formData.append('grant_type', 'authorization_code');
                 formData.append('redirect_uri', this.redirectUri);
-                const state = await sessionStorage.getState();
+                const state = sessionStorage.getState();
                 if (state) {
                     formData.append('state', state);
                 }
-                const codeVerifier = await sessionStorage.getCodeVerifier();
+                const codeVerifier = sessionStorage.getCodeVerifier();
                 if (codeVerifier) {
                     formData.append('code_verifier', codeVerifier);
                 }
@@ -79,7 +79,7 @@ class KindeSDK {
                         if (responseJson.error) {
                             return reject(responseJson);
                         }
-                        await sessionStorage.setAccessToken(
+                        sessionStorage.setAccessToken(
                             responseJson.access_token
                         );
                         resolve(responseJson);
@@ -99,18 +99,14 @@ class KindeSDK {
     }
 
     async logout() {
-        await this.cleanUp();
+        this.cleanUp();
         const URLParsed = Url(this.logoutEndpoint, true);
         URLParsed.query['redirect'] = this.logoutRedirectUri;
         Linking.openURL(URLParsed.toString());
     }
 
-    async cleanUp(): Promise<void[]> {
-        return Promise.all([
-            sessionStorage.setState(''),
-            sessionStorage.setAccessToken(''),
-            sessionStorage.setCodeVerifier('')
-        ]);
+    cleanUp(): void {
+        return sessionStorage.clear();
     }
 
     get authorizationEndpoint(): string {

@@ -2,6 +2,10 @@
 const { KindeSDK, UserApi } = require(process.cwd() + '/src/index');
 import { Linking } from 'react-native';
 import Url from 'url-parse';
+import BaseStore from '../src/SDK/Storage/Base';
+
+BaseStore.prototype.getItem = jest.fn().mockReturnValue('random_value');
+BaseStore.prototype.setItem = jest.fn();
 
 global.fetch = jest.fn(() =>
     Promise.resolve({
