@@ -1,10 +1,10 @@
 import { checkNotNull } from './Utils';
 import Url from 'url-parse';
 import { Linking } from 'react-native';
-import Storage from './Storage';
 import AuthorizationCode from './OAuth/AuthorizationCode';
+import Storage from './Storage';
 
-export default class KindeSDK extends Storage {
+export default class KindeSDK {
     constructor(
         issuer,
         redirectUri,
@@ -12,7 +12,6 @@ export default class KindeSDK extends Storage {
         logoutRedirectUri,
         scope = 'openid offline'
     ) {
-        super();
         this.issuer = issuer;
         checkNotNull(this.issuer, 'Issuer');
 
@@ -31,7 +30,7 @@ export default class KindeSDK extends Storage {
     }
 
     async login() {
-        await this.cleanUp();
+        this.cleanUp();
         const auth = new AuthorizationCode();
         return auth.login(this, true);
     }
@@ -53,15 +52,14 @@ export default class KindeSDK extends Storage {
                 formData.append('client_secret', this.clientSecret);
                 formData.append('grant_type', 'authorization_code');
                 formData.append('redirect_uri', this.redirectUri);
-                const state = await this.getState();
+                const state = Storage.getState();
                 if (state) {
                     formData.append('state', state);
                 }
-                const codeVerifier = await this.getCodeVerifier();
+                const codeVerifier = Storage.getCodeVerifier();
                 if (codeVerifier) {
                     formData.append('code_verifier', codeVerifier);
                 }
-                const that = this;
                 fetch(this.tokenEndpoint, {
                     method: 'POST',
                     headers: {
@@ -74,7 +72,7 @@ export default class KindeSDK extends Storage {
                         if (responseJson.error) {
                             return reject(responseJson);
                         }
-                        await that.setAccessToken(responseJson.access_token);
+                        Storage.setAccessToken(responseJson.access_token);
                         resolve(responseJson);
                     })
                     .catch((err) => {
@@ -92,18 +90,14 @@ export default class KindeSDK extends Storage {
     }
 
     async logout() {
-        await this.cleanUp();
+        this.cleanUp();
         const URLParsed = Url(this.logoutEndpoint, true);
         URLParsed.query['redirect'] = this.logoutRedirectUri;
         Linking.openURL(URLParsed.toString());
     }
 
     async cleanUp() {
-        return Promise.all([
-            this.setState(''),
-            this.setAccessToken(''),
-            this.setCodeVerifier('')
-        ]);
+        return Storage.clear();
     }
 
     get authorizationEndpoint() {

@@ -1,7 +1,10 @@
 const { KindeSDK, ApiClient, UserApi } = require(process.cwd() + '/src/index');
 import { Linking } from 'react-native';
 import Url from 'url-parse';
+import BaseStore from './src/SDK/Storage/base';
 
+BaseStore.prototype.getItem = jest.fn().mockReturnValue('random_value');
+BaseStore.prototype.setItem = jest.fn();
 global.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>
@@ -44,11 +47,6 @@ jest.mock('Linking', () => ({
     openURL: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn()
-}));
-
-jest.mock('AsyncStorage', () => ({
-    getItem: jest.fn().mockReturnValue('random_value'),
-    setItem: jest.fn()
 }));
 
 jest.mock('./src/SDK/Utils', () => ({

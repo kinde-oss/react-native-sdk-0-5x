@@ -27,14 +27,13 @@ import Storage from './SDK/Storage';
  * @alias module:ApiClient
  * @class
  */
-class ApiClient extends Storage {
+class ApiClient {
     /**
      * The base URL against which to resolve every API call's (relative) path.
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
     constructor(basePath = 'https://app.kinde.com') {
-        super();
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
@@ -441,9 +440,8 @@ class ApiClient extends Storage {
             }
         }
 
-        // Set access token from Storage
-
-        const accessToken = await this.getAccessToken();
+        // Set access token from sessionStore
+        const accessToken = Storage.getAccessToken();
         if (accessToken) {
             request.set({ Authorization: 'Bearer ' + accessToken });
         }

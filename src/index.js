@@ -13,8 +13,8 @@
 
 import ApiClient from './ApiClient';
 import KindeSDK from './SDK/KindeSDK';
-import Storage from './SDK/Storage';
 import Utils from './SDK/Utils';
+import Storage from './SDK/Storage';
 
 import User from './model/User';
 import UserProfile from './model/UserProfile';
