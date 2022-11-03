@@ -316,16 +316,9 @@ To access the user information, use the `UserApi` class exported from `KindeReac
 
 ```javascript
 ...
-import { ..., UserApi, ... } from 'KindeReactNativeOAuth';
+import { ..., UserApi, Configuration, ... } from 'KindeReactNativeOAuth';
 ...
 
-state = {
-  ...
-  userApi: new UserApi({
-    basePath: KINDE_ISSUER_URL
-  }),
-  ...
-}
 ...
 constructor() {
   ...
@@ -335,8 +328,12 @@ constructor() {
 ...
 
 getUserProfile() {
-  const userProfile = await this.state.userApi.getUserProfile();
-  console.log(userProfile);
+  const config = new Configuration({
+    basePath: KINDE_ISSUER_URL,
+  });
+  const userApi = new UserApi(config);
+  const data = await userApi.getUserProfile();
+  console.log(data);
 }
 
 ```
