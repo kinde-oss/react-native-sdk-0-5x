@@ -1,21 +1,16 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "emitDeclarationOnly": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "lib": ["es6"],
-    "types": ["react-native"]
-  },
-  "include": ["src"],
-  "exclude": [
-    "dist",
-    "node_modules", 
-    "**/__tests__/*",
-    "**/test/*"
-  ]
+    "compilerOptions": {
+        "declaration": true,
+        "target": "es5",
+        "module": "commonjs",
+        "strict": true,
+        "emitDeclarationOnly": true,
+        "isolatedModules": true,
+        "esModuleInterop": true,
+        "outDir": "./dist",
+        "lib": ["es6"],
+        "types": ["react-native"]
+    },
+    "include": ["src"],
+    "exclude": ["dist", "node_modules", "**/__tests__/*", "**/test/*"]
 }
