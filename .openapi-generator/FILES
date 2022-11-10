@@ -9,7 +9,9 @@
 .prettierrc.json
 .travis.yml
 .watchmanconfig
+LICENSE
 README.md
+__tests__/index.spec.ts
 android/app/BUCK
 android/app/build.gradle
 android/app/proguard-rules.pro
@@ -25,7 +27,6 @@ android/gradlew.bat
 android/settings.gradle
 app.json
 git_push.sh
-index.spec.js
 ios/KindeSDKRN.xcodeproj/project.pbxproj
 ios/KindeSDKRN.xcodeproj/xcshareddata/xcschemes/KindeSDKRN.xcscheme
 ios/KindeSDKRN/AppDelegate.h
@@ -42,13 +43,16 @@ package.json
 src/ApiClient.ts
 src/SDK/KindeSDK.ts
 src/SDK/OAuth/AuthorizationCode.ts
-src/SDK/Storage.ts
+src/SDK/Storage/Base.ts
+src/SDK/Storage/index.ts
 src/SDK/Utils.ts
 src/apis/UserApi.ts
 src/apis/index.ts
+src/common/exceptions/property-required.exception.ts
 src/index.ts
 src/models/User.ts
 src/models/UserProfile.ts
 src/models/Users.ts
 src/models/index.ts
+src/types/global.d.ts
 tsconfig.json
