@@ -5,6 +5,7 @@ import BaseStore from './src/SDK/Storage/base';
 
 BaseStore.prototype.getItem = jest.fn().mockReturnValue('random_value');
 BaseStore.prototype.setItem = jest.fn();
+
 global.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>

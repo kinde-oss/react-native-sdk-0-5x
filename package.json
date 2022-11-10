@@ -1,17 +1,36 @@
 {
-    "name": "KindeReactNativeOAuth",
+    "name": "@kinde-oss/react-native-sdk",
     "version": "0.1.1",
-    "description": "Provides_endpoints_to_manage_your_Kinde_Businesses",
-    "license": "Unlicense",
+    "description": "Kinde React Native SDK for authentication",
+    "license": "Apache-2.0",
+    "homepage": "https://kinde.com",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/@kinde-oss/react-native-sdk"
+    },
+    "bugs": "https://github.com/@kinde-oss/react-native-sdk",
     "main": "dist/index.js",
     "scripts": {
         "build": "babel src -d dist",
-        "prepare": "npm run build && husky install",
-        "test": "jest --no-watchman"
+        "prepare": "npm run build",
+        "test": "jest"
+    },
+    "author": {
+        "name": "Kinde",
+        "email": "engineering@kinde.com",
+        "url": "https://kinde.com"
     },
     "browser": {
         "fs": false
     },
+    "keywords": [
+        "Kinde",
+        "login",
+        "Authorization Code Grant Flow",
+        "PKCE",
+        "Single Page Application authentication",
+        "React Native authentication"
+    ],
     "dependencies": {
         "@babel/runtime": "^7.19.4",
         "crypto-js": "3.3.0",

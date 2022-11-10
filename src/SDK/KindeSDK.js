@@ -5,6 +5,15 @@ import AuthorizationCode from './OAuth/AuthorizationCode';
 import Storage from './Storage';
 
 export default class KindeSDK {
+    /**
+     * The constructor function takes in the issuer, redirectUri, clientId, logoutRedirectUri, and
+     * scope as parameters and assigns them to the class properties
+     * @param issuer - The URL of the OpenID Connect provider.
+     * @param redirectUri - The URL that the user will be redirected to after they log in.
+     * @param clientId - The client ID of the application.
+     * @param logoutRedirectUri - The URL to redirect to after logout.
+     * @param [scope=openid offline] - The scope of the access request.
+     */
     constructor(
         issuer,
         redirectUri,
@@ -29,12 +38,23 @@ export default class KindeSDK {
         this.clientSecret = '';
     }
 
-    async login() {
+    /**
+     * The function calls the login() function of the AuthorizationCode class, which is a class that is
+     * part of the Auth0 library
+     * @returns A promise.
+     */
+    login() {
         this.cleanUp();
         const auth = new AuthorizationCode();
         return auth.login(this, true);
     }
 
+    /**
+     * It takes a URL as an argument, parses the URL, and then uses the code from the URL to get an
+     * access token from the token endpoint
+     * @param url - The URL that the user is redirected to after they have logged in.
+     * @returns A promise that resolves to an object containing the access token.
+     */
     getToken(url) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -84,19 +104,28 @@ export default class KindeSDK {
         });
     }
 
+    /**
+     * The function calls the login() function of the AuthorizationCode class, which is a class that is
+     * part of the Auth0 library
+     * @returns A promise.
+     */
     register() {
         const auth = new AuthorizationCode();
         return auth.login(this, true, 'registration');
     }
 
-    async logout() {
+    /**
+     * It cleans up the local storage, then opens a new browser window to the logout endpoint, with a
+     * redirect parameter set to the logout redirect uri
+     */
+    logout() {
         this.cleanUp();
         const URLParsed = Url(this.logoutEndpoint, true);
         URLParsed.query['redirect'] = this.logoutRedirectUri;
         Linking.openURL(URLParsed.toString());
     }
 
-    async cleanUp() {
+    cleanUp() {
         return Storage.clear();
     }
 
