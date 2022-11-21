@@ -31,6 +31,14 @@ class Storage extends BaseStore {
         );
     }
 
+    getAuthStatus(): string | undefined {
+        return this.getItem('authStatus');
+    }
+
+    setAuthStatus(newAuthStatus: string): void {
+        return this.setItem('authStatus', this.convertString(newAuthStatus));
+    }
+
     convertString(str: string | object): string {
         return typeof str === 'string' ? str : JSON.stringify(str);
     }

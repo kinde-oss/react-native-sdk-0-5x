@@ -3,6 +3,8 @@ import Url from 'url-parse';
 import { Linking } from 'react-native';
 import AuthorizationCode from './OAuth/AuthorizationCode';
 import { sessionStorage } from './Storage';
+import { AuthStatus } from './Enums/AuthStatus.enum';
+import { UnAuthenticatedException } from '../common/exceptions/unauthenticated.exception';
 
 class KindeSDK {
     public issuer: string;
@@ -11,6 +13,7 @@ class KindeSDK {
     public logoutRedirectUri: string;
     public scope: string;
     public clientSecret?: string;
+    public authStatus: AuthStatus;
 
     /**
      * The constructor function takes in the issuer, redirectUri, clientId, logoutRedirectUri, and
@@ -44,6 +47,7 @@ class KindeSDK {
         this.scope = scope;
 
         this.clientSecret = '';
+        this.authStatus = AuthStatus.UNAUTHENTICATED;
     }
 
     /**
@@ -53,6 +57,7 @@ class KindeSDK {
     async login(): Promise<void> {
         this.cleanUp();
         const auth = new AuthorizationCode();
+        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
         return auth.login(this, true);
     }
 
@@ -65,6 +70,9 @@ class KindeSDK {
     getToken(url: string): Promise<void> {
         return new Promise(async (resolve, reject) => {
             try {
+                if (this.checkIsUnAuthenticated()) {
+                    reject(new UnAuthenticatedException());
+                }
                 checkNotNull(url, 'URL');
                 const URLParsed = Url(url, true);
                 const { code, error, error_description } = URLParsed.query;
@@ -102,12 +110,15 @@ class KindeSDK {
                         sessionStorage.setAccessToken(
                             responseJson.access_token
                         );
+                        this.updateAuthStatus(AuthStatus.AUTHENTICATED);
                         resolve(responseJson);
                     })
                     .catch((err) => {
                         reject(err.response.data);
+                        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
                     });
             } catch (error) {
+                this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
                 reject(error);
             }
         });
@@ -120,6 +131,7 @@ class KindeSDK {
      */
     register(): Promise<void> {
         const auth = new AuthorizationCode();
+        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
         return auth.login(this, true, 'registration');
     }
 
@@ -134,8 +146,39 @@ class KindeSDK {
         Linking.openURL(URLParsed.toString());
     }
 
+    /**
+     * It clears the session storage and sets the authentication status to unauthenticated
+     * @returns The sessionStorage.clear() method is being returned.
+     */
     cleanUp(): void {
+        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
         return sessionStorage.clear();
+    }
+
+    /**
+     * It updates the authStatus variable and then saves the new value to the sessionStorage
+     * @param {AuthStatus} _authStatus - The new auth status to set.
+     */
+    updateAuthStatus(_authStatus: AuthStatus): void {
+        this.authStatus = _authStatus;
+        sessionStorage.setAuthStatus(this.authStatus);
+    }
+
+    /**
+     * If the authStatus is UNAUTHENTICATED, then return true
+     * @returns A boolean value.
+     */
+    checkIsUnAuthenticated() {
+        const authStatusStorage = sessionStorage.getAuthStatus();
+        if (
+            (!this.authStatus ||
+                this.authStatus === AuthStatus.UNAUTHENTICATED) &&
+            (!authStatusStorage ||
+                authStatusStorage === AuthStatus.UNAUTHENTICATED)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     get authorizationEndpoint(): string {
