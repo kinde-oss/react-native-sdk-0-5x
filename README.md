@@ -114,21 +114,18 @@ import { ..., Linking, Platform, ... } from 'react-native';
 ...
 
 componentDidMount() {
-  if (Platform.OS === 'ios') {
-    Linking.addEventListener('url', (event) => {
-      if (event.url) {
-        this.handleCallback(event.url);
-      }
-    })
-  } else {
     Linking.getInitialURL()
       .then((url) => {
         if (url) {
-          this.handleCallback(url);
+          // Need to implement
         }
       })
       .catch((err) => console.error("An error occurred", err));
-  }
+  Linking.addEventListener('url', (event) => {
+      if (event.url) {
+        // Need to implement
+      }
+    })
 }
 ```
 
@@ -219,11 +216,11 @@ The Kinde client provides methods for an easy to implement login / register flow
 As an example if you add buttons in your render as follows:
 
 ```javascript
-<View style=>
+<View>
     <View>
         <Button title="Sign In" onPress={this.handleSignIn} />
     </View>
-    <View style=>
+    <View>
         <Button title="Sign Up" color="#000" onPress={this.handleSignUp} />
     </View>
 </View>
@@ -263,28 +260,56 @@ constructor() {
   ...
 }
 ...
-componentWillMount() {
-  if (Platform.OS === 'ios') {
-    Linking.addEventListener('url', (event) => {
-      if (event.url) {
-        this.handleCallback(event.url);
+componentDidMount() {
+  Linking.getInitialURL()
+    .then((url) => {
+      if (url) {
+        this.handleCallback(url);
       }
     })
-  } else {
-    Linking.getInitialURL()
-      .then((url) => {
-        if (url) {
-          this.handleCallback(url);
-        }
-      })
-      .catch((err) => console.error("An error occurred", err));
-  }
+    .catch((err) => console.error("An error occurred", err));
+
+  Linking.addEventListener('url', (event) => {
+    if (event.url) {
+      this.handleCallback(event.url);
+    }
+  })
 }
 
 handleCallback(url) {
   this.state.client.getToken(url).then(() => {
     console.log('Authenticated!!!');
   });
+}
+```
+
+You can also get the current authentication status with `AuthStatus`:
+
+```javascript
+...
+import {..., AuthStatus ,...} from '@kinde-oss/react-native-sdk';
+...
+
+...
+
+handleCallback(url) {
+  if (this.state.client.authStatus !== AuthStatus.UNAUTHENTICATED) {
+    this.state.client.getToken(url).then(() => {
+      console.log('Authenticated!!!');
+    });
+  }
+}
+```
+
+Or simply use `checkIsUnauthenticated` from the SDK to determine whether the user is authenticated or not:
+
+```javascript
+handleCallback(url) {
+  if (!this.state.client.checkIsUnAuthenticated()) {
+    this.state.client.getToken(url).then(() => {
+      console.log('Authenticated!!!');
+    });
+  }
 }
 ```
 
