@@ -3,6 +3,8 @@ import Url from 'url-parse';
 import { Linking } from 'react-native';
 import AuthorizationCode from './OAuth/AuthorizationCode';
 import Storage from './Storage';
+import authStatusConstants from './constants/auth-status.constants';
+import { UnAuthenticatedException } from '../common/exceptions/unauthenticated.exception';
 
 export default class KindeSDK {
     /**
@@ -36,6 +38,7 @@ export default class KindeSDK {
         this.scope = scope;
 
         this.clientSecret = '';
+        this.authStatus = authStatusConstants.UNAUTHENTICATED;
     }
 
     /**
@@ -46,6 +49,7 @@ export default class KindeSDK {
     login() {
         this.cleanUp();
         const auth = new AuthorizationCode();
+        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
         return auth.login(this, true);
     }
 
@@ -58,6 +62,9 @@ export default class KindeSDK {
     getToken(url) {
         return new Promise(async (resolve, reject) => {
             try {
+                if (this.checkIsUnAuthenticated()) {
+                    reject(new UnAuthenticatedException());
+                }
                 checkNotNull(url, 'URL');
                 const URLParsed = Url(url, true);
                 const { code, error, error_description } = URLParsed.query;
@@ -93,12 +100,15 @@ export default class KindeSDK {
                             return reject(responseJson);
                         }
                         Storage.setAccessToken(responseJson.access_token);
+                        this.updateAuthStatus(AuthStatus.AUTHENTICATED);
                         resolve(responseJson);
                     })
                     .catch((err) => {
+                        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
                         reject(err.response.data);
                     });
             } catch (error) {
+                this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
                 reject(error);
             }
         });
@@ -111,6 +121,7 @@ export default class KindeSDK {
      */
     register() {
         const auth = new AuthorizationCode();
+        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
         return auth.login(this, true, 'registration');
     }
 
@@ -126,7 +137,26 @@ export default class KindeSDK {
     }
 
     cleanUp() {
+        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
         return Storage.clear();
+    }
+
+    updateAuthStatus(_authStatus) {
+        this.authStatus = _authStatus;
+        Storage.setAuthStatus(this.authStatus);
+    }
+
+    checkIsUnAuthenticated() {
+        const authStatusStorage = Storage.getAuthStatus();
+        if (
+            (!this.authStatus ||
+                this.authStatus === AuthStatus.UNAUTHENTICATED) &&
+            (!authStatusStorage ||
+                authStatusStorage === AuthStatus.UNAUTHENTICATED)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     get authorizationEndpoint() {
