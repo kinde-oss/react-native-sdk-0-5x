@@ -49,7 +49,7 @@ export default class KindeSDK {
     login() {
         this.cleanUp();
         const auth = new AuthorizationCode();
-        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
+        this.updateAuthStatus(authStatusConstants.AUTHENTICATING);
         return auth.login(this, true);
     }
 
@@ -100,15 +100,19 @@ export default class KindeSDK {
                             return reject(responseJson);
                         }
                         Storage.setAccessToken(responseJson.access_token);
-                        this.updateAuthStatus(AuthStatus.AUTHENTICATED);
+                        this.updateAuthStatus(
+                            authStatusConstants.AUTHENTICATED
+                        );
                         resolve(responseJson);
                     })
                     .catch((err) => {
-                        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
+                        this.updateAuthStatus(
+                            authStatusConstants.UNAUTHENTICATED
+                        );
                         reject(err.response.data);
                     });
             } catch (error) {
-                this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
+                this.updateAuthStatus(authStatusConstants.UNAUTHENTICATED);
                 reject(error);
             }
         });
@@ -121,7 +125,7 @@ export default class KindeSDK {
      */
     register() {
         const auth = new AuthorizationCode();
-        this.updateAuthStatus(AuthStatus.AUTHENTICATING);
+        this.updateAuthStatus(authStatusConstants.AUTHENTICATING);
         return auth.login(this, true, 'registration');
     }
 
@@ -137,7 +141,7 @@ export default class KindeSDK {
     }
 
     cleanUp() {
-        this.updateAuthStatus(AuthStatus.UNAUTHENTICATED);
+        this.updateAuthStatus(authStatusConstants.UNAUTHENTICATED);
         return Storage.clear();
     }
 
@@ -150,9 +154,9 @@ export default class KindeSDK {
         const authStatusStorage = Storage.getAuthStatus();
         if (
             (!this.authStatus ||
-                this.authStatus === AuthStatus.UNAUTHENTICATED) &&
+                this.authStatus === authStatusConstants.UNAUTHENTICATED) &&
             (!authStatusStorage ||
-                authStatusStorage === AuthStatus.UNAUTHENTICATED)
+                authStatusStorage === authStatusConstants.UNAUTHENTICATED)
         ) {
             return true;
         }
