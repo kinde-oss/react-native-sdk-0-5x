@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
 /**
  * Kinde Management API
  * Provides endpoints to manage your Kinde Businesses
@@ -13,7 +11,7 @@
  *
  */
 
-import { exists, mapValues } from '../ApiClient';
+import { exists } from '../ApiClient';
 /**
  *
  * @export

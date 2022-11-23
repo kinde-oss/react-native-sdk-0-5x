@@ -6,7 +6,7 @@ declare class KindeSDK {
     logoutRedirectUri: string;
     scope: string;
     clientSecret?: string;
-    authStatus?: AuthStatus;
+    authStatus: AuthStatus;
     /**
      * The constructor function takes in the issuer, redirectUri, clientId, logoutRedirectUri, and
      * scope as parameters

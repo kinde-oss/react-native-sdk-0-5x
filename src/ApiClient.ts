@@ -1,5 +1,3 @@
-/* tslint:disable */
-/* eslint-disable */
 /**
  * Kinde Management API
  * Provides endpoints to manage your Kinde Businesses
@@ -409,13 +407,6 @@ function querystringSingleKey(
     )}`;
 }
 
-export function mapValues(data: any, fn: (item: any) => any) {
-    return Object.keys(data).reduce(
-        (acc, key) => ({ ...acc, [key]: fn(data[key]) }),
-        {}
-    );
-}
-
 export function canConsumeForm(consumes: Consume[]): boolean {
     for (const consume of consumes) {
         if ('multipart/form-data' === consume.contentType) {
@@ -474,29 +465,5 @@ export class JSONApiResponse<T> {
 
     async value(): Promise<T> {
         return this.transformer(await this.raw.json());
-    }
-}
-
-export class VoidApiResponse {
-    constructor(public raw: Response) {}
-
-    async value(): Promise<void> {
-        return undefined;
-    }
-}
-
-export class BlobApiResponse {
-    constructor(public raw: Response) {}
-
-    async value(): Promise<Blob> {
-        return await this.raw.blob();
-    }
-}
-
-export class TextApiResponse {
-    constructor(public raw: Response) {}
-
-    async value(): Promise<string> {
-        return await this.raw.text();
     }
 }

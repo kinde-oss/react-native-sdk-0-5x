@@ -61,17 +61,17 @@ export declare class BaseAPI {
 }
 export declare class ResponseError extends Error {
     response: Response;
-    name: 'ResponseError';
+    name: "ResponseError";
     constructor(response: Response, msg?: string);
 }
 export declare class FetchError extends Error {
     cause: unknown;
-    name: 'FetchError';
+    name: "FetchError";
     constructor(cause: unknown, msg?: string);
 }
 export declare class RequiredError extends Error {
     field: string;
-    name: 'RequiredError';
+    name: "RequiredError";
     constructor(field: string, msg?: string);
 }
 export declare const COLLECTION_FORMATS: {
@@ -80,24 +80,24 @@ export declare const COLLECTION_FORMATS: {
     tsv: string;
     pipes: string;
 };
-export declare type FetchAPI = WindowOrWorkerGlobalScope['fetch'];
-export declare type Json = any;
-export declare type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
-export declare type HTTPHeaders = {
+export type FetchAPI = WindowOrWorkerGlobalScope['fetch'];
+export type Json = any;
+export type HTTPMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS' | 'HEAD';
+export type HTTPHeaders = {
     [key: string]: string;
 };
-export declare type HTTPQuery = {
+export type HTTPQuery = {
     [key: string]: string | number | null | boolean | Array<string | number | null | boolean> | Set<string | number | null | boolean> | HTTPQuery;
 };
-export declare type HTTPBody = Json | FormData | URLSearchParams;
-export declare type HTTPRequestInit = {
+export type HTTPBody = Json | FormData | URLSearchParams;
+export type HTTPRequestInit = {
     headers?: HTTPHeaders;
     method: HTTPMethod;
     credentials?: RequestCredentials_;
     body?: HTTPBody;
 };
-export declare type ModelPropertyNaming = 'camelCase' | 'snake_case' | 'PascalCase' | 'original';
-export declare type InitOverrideFunction = (requestContext: {
+export type ModelPropertyNaming = 'camelCase' | 'snake_case' | 'PascalCase' | 'original';
+export type InitOverrideFunction = (requestContext: {
     init: HTTPRequestInit;
     context: RequestOpts;
 }) => Promise<RequestInit>;
@@ -114,7 +114,6 @@ export interface RequestOpts {
 }
 export declare function exists(json: any, key: string): boolean;
 export declare function querystring(params: HTTPQuery, prefix?: string): string;
-export declare function mapValues(data: any, fn: (item: any) => any): {};
 export declare function canConsumeForm(consumes: Consume[]): boolean;
 export interface Consume {
     contentType: string;
@@ -154,19 +153,4 @@ export declare class JSONApiResponse<T> {
     private transformer;
     constructor(raw: Response, transformer?: ResponseTransformer<T>);
     value(): Promise<T>;
-}
-export declare class VoidApiResponse {
-    raw: Response;
-    constructor(raw: Response);
-    value(): Promise<void>;
-}
-export declare class BlobApiResponse {
-    raw: Response;
-    constructor(raw: Response);
-    value(): Promise<Blob>;
-}
-export declare class TextApiResponse {
-    raw: Response;
-    constructor(raw: Response);
-    value(): Promise<string>;
 }

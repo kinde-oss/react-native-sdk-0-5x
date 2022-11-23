@@ -112,21 +112,21 @@ If your app was launched from an external url registered to your app you can acc
 ...
 import { ..., Linking, Platform, ... } from 'react-native';
 ...
-
-componentDidMount() {
-    Linking.getInitialURL()
-      .then((url) => {
-        if (url) {
-          // Need to implement
-        }
-      })
-      .catch((err) => console.error("An error occurred", err));
-  Linking.addEventListener('url', (event) => {
-      if (event.url) {
+useEffect(() => {
+  Linking.getInitialURL()
+    .then((url) => {
+      if (url) {
         // Need to implement
       }
     })
-}
+    .catch((err) => console.error("An error occurred", err));
+
+  Linking.addEventListener('url', (event) => {
+    if (event.url) {
+      // Need to implement
+    }
+  })
+}, []);
 ```
 
 #### iOS
@@ -202,11 +202,7 @@ import { KindeSDK } from '@kinde-oss/react-native-sdk';
 ...
 
 ...
-state = {
-  ...
-  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI)
-  ...
-}
+const client = new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI);
 ...
 ```
 
@@ -218,10 +214,10 @@ As an example if you add buttons in your render as follows:
 ```javascript
 <View>
     <View>
-        <Button title="Sign In" onPress={this.handleSignIn} />
+        <Button title="Sign In" onPress={handleSignIn} />
     </View>
     <View>
-        <Button title="Sign Up" color="#000" onPress={this.handleSignUp} />
+        <Button title="Sign Up" color="#000" onPress={handleSignUp} />
     </View>
 </View>
 ```
@@ -231,20 +227,14 @@ Then define new functions that match for each button:
 
 ```javascript
 ...
-constructor() {
-  ...
-  this.handleSignUp = this.handleSignUp.bind(this);
-  this.handleSignIn = this.handleSignIn.bind(this);
-  ...
-}
+// with functional component
+const handleSignUp = () => {
+  client.register();
+};
 
-handleSignUp() {
-  this.state.client.register();
-}
-
-handleSignIn() {
-  this.state.client.login();
-}
+const handleSignIn = () => {
+  client.login();
+};
 ...
 ```
 
@@ -253,34 +243,27 @@ handleSignIn() {
 Once your user is redirected back to your app from Kinde, using the getToken method to get token instance from Kinde
 
 ```javascript
-...
-constructor() {
-  ...
-  this.handleCallback = this.handleCallback.bind(this);
-  ...
-}
-...
-componentDidMount() {
-  Linking.getInitialURL()
-    .then((url) => {
-      if (url) {
-        this.handleCallback(url);
-      }
-    })
-    .catch((err) => console.error("An error occurred", err));
+const handleCallback = (url) => {
+    client.getToken(url).then(() => {
+        console.log('Authenticated!!!');
+    });
+};
 
-  Linking.addEventListener('url', (event) => {
-    if (event.url) {
-      this.handleCallback(event.url);
-    }
-  })
-}
+useEffect(() => {
+    Linking.getInitialURL()
+        .then((url) => {
+            if (url) {
+                handleCallback(url);
+            }
+        })
+        .catch((err) => console.error('An error occurred', err));
 
-handleCallback(url) {
-  this.state.client.getToken(url).then(() => {
-    console.log('Authenticated!!!');
-  });
-}
+    Linking.addEventListener('url', (event) => {
+        if (event.url) {
+            handleCallback(event.url);
+        }
+    });
+}, []);
 ```
 
 You can also get the current authentication status with `AuthStatus`:
@@ -290,11 +273,9 @@ You can also get the current authentication status with `AuthStatus`:
 import {..., AuthStatus ,...} from '@kinde-oss/react-native-sdk';
 ...
 
-...
-
-handleCallback(url) {
-  if (this.state.client.authStatus !== AuthStatus.UNAUTHENTICATED) {
-    this.state.client.getToken(url).then(() => {
+const handleCallback = (url) => {
+  if (client.authStatus !== AuthStatus.UNAUTHENTICATED) {
+    client.getToken(url).then(() => {
       console.log('Authenticated!!!');
     });
   }
@@ -304,13 +285,13 @@ handleCallback(url) {
 Or simply use `checkIsUnauthenticated` from the SDK to determine whether the user is authenticated or not:
 
 ```javascript
-handleCallback(url) {
-  if (!this.state.client.checkIsUnAuthenticated()) {
-    this.state.client.getToken(url).then(() => {
-      console.log('Authenticated!!!');
-    });
-  }
-}
+const handleCallback = (url) => {
+    if (!client.checkIsUnAuthenticated()) {
+        client.getToken(url).then(() => {
+            console.log('Authenticated!!!');
+        });
+    }
+};
 ```
 
 ### Logout
@@ -318,19 +299,9 @@ handleCallback(url) {
 This is implemented in much the same way as logging in or registering. The Kinde SPA client comes with a logout method
 
 ```javascript
-...
-constructor() {
-  ...
-  this.handleLogout = this.handleLogout.bind(this);
-  ...
-}
-...
-
-handleLogout() {
-  ...
-  this.state.client.logout();
-  ...
-}
+const handleLogout = () => {
+    client.logout();
+};
 ```
 
 ### Get user information
@@ -344,15 +315,7 @@ To access the user information, use the `UserApi` class exported from `@kinde-os
 import { ..., UserApi, Configuration, ... } from '@kinde-oss/react-native-sdk';
 ...
 
-...
-constructor() {
-  ...
-  this.getUserProfile = this.getUserProfile.bind(this);
-  ...
-}
-...
-
-getUserProfile() {
+const getUserProfile = () => {
   const config = new Configuration({
     basePath: KINDE_ISSUER_URL,
   });
@@ -360,7 +323,6 @@ getUserProfile() {
   const data = await userApi.getUserProfile();
   console.log(data);
 }
-
 ```
 
 ### View users in Kinde
