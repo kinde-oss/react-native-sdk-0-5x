@@ -61,17 +61,17 @@ export declare class BaseAPI {
 }
 export declare class ResponseError extends Error {
     response: Response;
-    name: "ResponseError";
+    name: 'ResponseError';
     constructor(response: Response, msg?: string);
 }
 export declare class FetchError extends Error {
     cause: unknown;
-    name: "FetchError";
+    name: 'FetchError';
     constructor(cause: unknown, msg?: string);
 }
 export declare class RequiredError extends Error {
     field: string;
-    name: "RequiredError";
+    name: 'RequiredError';
     constructor(field: string, msg?: string);
 }
 export declare const COLLECTION_FORMATS: {
