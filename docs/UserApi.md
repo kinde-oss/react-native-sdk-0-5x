@@ -1,4 +1,4 @@
-# @KindeOssReactNativeSdk.UserApi
+# @KindeOssReactNativeSdkLt06.UserApi
 
 All URIs are relative to *https://app.kinde.com*
 
@@ -17,13 +17,13 @@ Test
 ### Example
 
 ```javascript
-import @KindeOssReactNativeSdk from '@kinde-oss/react-native-sdk-lt-0-6';
-let defaultClient = @KindeOssReactNativeSdk.ApiClient.instance;
+import @KindeOssReactNativeSdkLt06 from '@kinde-oss/react-native-sdk-lt-0-6';
+let defaultClient = @KindeOssReactNativeSdkLt06.ApiClient.instance;
 // Configure OAuth2 access token for authorization: oauth
 let oauth = defaultClient.authentications['oauth'];
 oauth.accessToken = 'YOUR ACCESS TOKEN';
 
-let apiInstance = new @KindeOssReactNativeSdk.UserApi();
+let apiInstance = new @KindeOssReactNativeSdkLt06.UserApi();
 apiInstance.getUserProfile((error, data, response) => {
   if (error) {
     console.error(error);

@@ -15,6 +15,7 @@ import ApiClient from './ApiClient';
 import KindeSDK from './SDK/KindeSDK';
 import Storage from './SDK/Storage';
 import Utils from './SDK/Utils';
+import authStatusConstants from './SDK/constants/auth-status.constants';
 
 import User from './model/User';
 import UserProfile from './model/UserProfile';
@@ -27,9 +28,9 @@ import UserApi from './api/UserApi';
  * <p>
  * An AMD (recommended!) or CommonJS application will generally do something equivalent to the following:
  * <pre>
- * var @KindeOssReactNativeSdk = require('index'); // See note below*.
- * var xxxSvc = new @KindeOssReactNativeSdk.XxxApi(); // Allocate the API class we're going to use.
- * var yyyModel = new @KindeOssReactNativeSdk.Yyy(); // Construct a model instance.
+ * var @KindeOssReactNativeSdkLt06 = require('index'); // See note below*.
+ * var xxxSvc = new @KindeOssReactNativeSdkLt06.XxxApi(); // Allocate the API class we're going to use.
+ * var yyyModel = new @KindeOssReactNativeSdkLt06.Yyy(); // Construct a model instance.
  * yyyModel.someProperty = 'someValue';
  * ...
  * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -41,8 +42,8 @@ import UserApi from './api/UserApi';
  * <p>
  * A non-AMD browser application (discouraged) might do something like this:
  * <pre>
- * var xxxSvc = new @KindeOssReactNativeSdk.XxxApi(); // Allocate the API class we're going to use.
- * var yyy = new @KindeOssReactNativeSdk.Yyy(); // Construct a model instance.
+ * var xxxSvc = new @KindeOssReactNativeSdkLt06.XxxApi(); // Allocate the API class we're going to use.
+ * var yyy = new @KindeOssReactNativeSdkLt06.Yyy(); // Construct a model instance.
  * yyyModel.someProperty = 'someValue';
  * ...
  * var zzz = xxxSvc.doSomething(yyyModel); // Invoke the service.
@@ -76,6 +77,7 @@ export {
      * @property {module:Utils}
      */
     Utils,
+    authStatusConstants,
 
     /**
      * The User model constructor.

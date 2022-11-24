@@ -1,4 +1,4 @@
-# @KindeOssReactNativeSdk.User
+# @KindeOssReactNativeSdkLt06.User
 
 ## Properties
 

@@ -1,13 +1,15 @@
 # @kinde-oss/react-native-sdk-lt-0-6
 
-React Native Client for `@kinde-oss/react-native-sdk-lt-0-6`.
+React Native Client for `@kinde-oss/react-native-sdk-lt-0-6`
 Provides endpoints to manage your Kinde Businesses
 
 We only support the [Authorization Code Flow with PKCE](https://oauth.net/2/pkce/).
 For more information, please visit [https://kinde.com/docs](https://kinde.com/docs)
 
 ## Support Versions
-  -   React Native: 0.50 -> 0.59
+
+-   React Native: 0.50 -> 0.59
+
 ## Installing dependencies
 
 You will need Node, the React Native command line interface, a JDK, Android Studio (for Android) and Xcode (for iOS).
@@ -264,17 +266,17 @@ handleCallback(url) {
 }
 ```
 
-You can also get the current authentication status with `AuthStatus`:
+You can also get the current authentication status with `authStatusConstants`:
 
 ```javascript
 ...
-import {..., AuthStatus ,...} from '@kinde-oss/react-native-sdk-lt-0-6';
+import {..., authStatusConstants ,...} from '@kinde-oss/react-native-sdk-lt-0-6';
 ...
 
 ...
 
 handleCallback(url) {
-  if (this.state.client.authStatus !== AuthStatus.UNAUTHENTICATED) {
+  if (this.state.client.authStatus !== authStatusConstants.UNAUTHENTICATED) {
     this.state.client.getToken(url).then(() => {
       console.log('Authenticated!!!');
     });
@@ -282,7 +284,7 @@ handleCallback(url) {
 }
 ```
 
-Or simply use checkIsUnauthenticated from the SDK to determine whether the user is authenticated or not:
+Or simply use `checkIsUnauthenticated` from the SDK to determine whether the user is authenticated or not:
 
 ```javascript
 handleCallback(url) {
@@ -318,7 +320,7 @@ handleLogout() {
 
 **\*Note warning:** Before you call the API, please make sure that you've already authenticated. If not, errors will appear there.\*
 
-To access the user information, use the `UserApi, ApiClient` classes exported from `KindeReactNativeOAuth`, then call the `getUserProfile` method of `UserApi` instance
+To access the user information, use the `UserApi, ApiClient` classes exported from `@kinde-oss/react-native-sdk-lt-0-6`, then call the `getUserProfile` method of `UserApi` instance
 
 ```javascript
 ...
@@ -390,8 +392,8 @@ npm test
 
 All URIs are relative to *https://app.kinde.com*
 
-| Class                                 | Method                                               | HTTP request                 | Description                  |
-| ------------------------------------- | ---------------------------------------------------- | ---------------------------- | ---------------------------- |
+| Class                                        | Method                                               | HTTP request                 | Description                  |
+| -------------------------------------------- | ---------------------------------------------------- | ---------------------------- | ---------------------------- |
 | _@kinde-oss/react-native-sdk-lt-0-6.UserApi_ | [**getUserProfile**](docs/UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile |
 
 ## Documentation for Models
