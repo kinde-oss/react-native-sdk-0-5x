@@ -17,7 +17,7 @@ Test
 ### Example
 
 ```javascript
-import @KindeOssReactNativeSdk from '@kinde-oss/react-native-sdk';
+import @KindeOssReactNativeSdk from '@kinde-oss/react-native-sdk-lt-0-6';
 let defaultClient = @KindeOssReactNativeSdk.ApiClient.instance;
 // Configure OAuth2 access token for authorization: oauth
 let oauth = defaultClient.authentications['oauth'];
