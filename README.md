@@ -1,6 +1,6 @@
-# @kinde-oss/react-native-sdk-lt-0-6
+# @kinde-oss/react-native-sdk-0-5x
 
-React Native Client for `@kinde-oss/react-native-sdk-lt-0-6`
+React Native Client for `@kinde-oss/react-native-sdk-0-5x`
 Provides endpoints to manage your Kinde Businesses
 
 We only support the [Authorization Code Flow with PKCE](https://oauth.net/2/pkce/).
@@ -25,7 +25,7 @@ To publish the library as a [npm](https://www.npmjs.com/), please follow the pro
 Then install it via:
 
 ```shell
-npm install @kinde-oss/react-native-sdk-lt-0-6 --save
+npm install @kinde-oss/react-native-sdk-0-5x --save
 ```
 
 Finally, you need to build the module:
@@ -42,10 +42,10 @@ To use the library locally without publishing to a remote npm registry, first in
 npm install
 ```
 
-To use this SDK, switch to the directory you want to use your `@kinde-oss/react-native-sdk-lt-0-6` from, and run:
+To use this SDK, switch to the directory you want to use your `@kinde-oss/react-native-sdk-0-5x` from, and run:
 
 ```shell
-npm pack /path/to/<JAVASCRIPT_CLIENT_DIR> && npm install ./@kinde-oss/react-native-sdk-lt-0-6-<version>.tgz
+npm pack /path/to/<JAVASCRIPT_CLIENT_DIR> && npm install ./@kinde-oss/react-native-sdk-0-5x-<version>.tgz
 ```
 
 ## Getting Started
@@ -181,7 +181,7 @@ You’ll need to create a new instance of the Kinde Auth client object. Please e
 
 ```javascript
 ...
-import { KindeSDK } from '@kinde-oss/react-native-sdk-lt-0-6';
+import { KindeSDK } from '@kinde-oss/react-native-sdk-0-5x';
 ...
 
 ...
@@ -270,7 +270,7 @@ You can also get the current authentication status with `authStatusConstants`:
 
 ```javascript
 ...
-import {..., authStatusConstants ,...} from '@kinde-oss/react-native-sdk-lt-0-6';
+import {..., authStatusConstants ,...} from '@kinde-oss/react-native-sdk-0-5x';
 ...
 
 ...
@@ -320,11 +320,11 @@ handleLogout() {
 
 **\*Note warning:** Before you call the API, please make sure that you've already authenticated. If not, errors will appear there.\*
 
-To access the user information, use the `UserApi, ApiClient` classes exported from `@kinde-oss/react-native-sdk-lt-0-6`, then call the `getUserProfile` method of `UserApi` instance
+To access the user information, use the `UserApi, ApiClient` classes exported from `@kinde-oss/react-native-sdk-0-5x`, then call the `getUserProfile` method of `UserApi` instance
 
 ```javascript
 ...
-import { ..., UserApi, ApiClient, ... } from '@kinde-oss/react-native-sdk-lt-0-6';
+import { ..., UserApi, ApiClient, ... } from '@kinde-oss/react-native-sdk-0-5x';
 ...
 
 state = {
@@ -394,10 +394,10 @@ All URIs are relative to *https://app.kinde.com*
 
 | Class                                        | Method                                               | HTTP request                 | Description                  |
 | -------------------------------------------- | ---------------------------------------------------- | ---------------------------- | ---------------------------- |
-| _@kinde-oss/react-native-sdk-lt-0-6.UserApi_ | [**getUserProfile**](docs/UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile |
+| _@kinde-oss/react-native-sdk-0-5x.UserApi_ | [**getUserProfile**](docs/UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile |
 
 ## Documentation for Models
 
--   [@kinde-oss/react-native-sdk-lt-0-6.User](docs/User.md)
--   [@kinde-oss/react-native-sdk-lt-0-6.UserProfile](docs/UserProfile.md)
--   [@kinde-oss/react-native-sdk-lt-0-6.Users](docs/Users.md)
+-   [@kinde-oss/react-native-sdk-0-5x.User](docs/User.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserProfile](docs/UserProfile.md)
+-   [@kinde-oss/react-native-sdk-0-5x.Users](docs/Users.md)
