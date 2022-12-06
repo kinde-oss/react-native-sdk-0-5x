@@ -1,6 +1,6 @@
 {
     "name": "@kinde-oss/react-native-sdk-0-5x",
-    "version": "0.1.1",
+    "version": "0.0.1",
     "description": "Kinde React Native SDK for authentication",
     "license": "Apache-2.0",
     "homepage": "https://kinde.com",
@@ -34,6 +34,7 @@
     "dependencies": {
         "@babel/runtime": "^7.19.4",
         "crypto-js": "3.3.0",
+        "jwt-decode": "^3.1.2",
         "qs": "^6.11.0",
         "superagent": "^7.0.2",
         "url-parse": "^1.5.10"

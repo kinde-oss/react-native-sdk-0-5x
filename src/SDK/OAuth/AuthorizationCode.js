@@ -1,18 +1,29 @@
 import { Linking } from 'react-native';
 import Url from 'url-parse';
-import { generateChallenge, generateRandomString } from '../Utils';
+import {
+    generateChallenge,
+    generateRandomString,
+    addAdditionalParameters
+} from '../Utils';
 import Storage from '../Storage';
 
 export default class AuthorizationCode {
     /**
-     * It generates a random string, stores it in the local storage, and then opens a browser window
-     * with the URL to the authorization endpoint, passing the random string as a parameter
-     * @param kindSDK - The object that contains the clientId, clientSecret, redirectUri,
-     * authorizationEndpoint, and scope.
-     * @param [usePKCE=false] - If you want to use PKCE, set this to true.
-     * @param [startPage=login] - The page to start on. This can be either 'login' or 'register'.
+     * It opens a browser window to the authorization endpoint of the Kindful API, passing along the
+     * client ID, redirect URI, client secret, grant type, scope, start page, response type, state, and
+     * any additional parameters that are passed in
+     * @param kindSDK - The SDK object that you created in the previous step.
+     * @param [usePKCE=false] - boolean, whether to use PKCE or not.
+     * @param [startPage=login] - The page to start the login flow on.
+     * @param [additionalParameters] - This is an object that contains additional parameters that you
+     * want to pass to the login page.
      */
-    login(kindSDK, usePKCE = false, startPage = 'login') {
+    login(
+        kindSDK,
+        usePKCE = false,
+        startPage = 'login',
+        additionalParameters = {}
+    ) {
         const URLParsed = Url(kindSDK.authorizationEndpoint, true);
         URLParsed.query['client_id'] = kindSDK.clientId;
         URLParsed.query['redirect_uri'] = kindSDK.redirectUri;
@@ -24,6 +35,7 @@ export default class AuthorizationCode {
 
         const stateGenerated = generateRandomString();
         URLParsed.query['state'] = stateGenerated;
+        addAdditionalParameters(URLParsed.query, additionalParameters);
         Storage.setState(stateGenerated);
         if (usePKCE) {
             const challenge = generateChallenge();

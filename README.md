@@ -28,13 +28,13 @@ Then install it via:
 npm install @kinde-oss/react-native-sdk-0-5x --save
 ```
 
-Finally, you need to build the module:
+##### Local development
+
+**Note:** Before you run `npm install`, ensure you already have `.git` folder, or you can generate it with command:
 
 ```shell
-npm run build
+git init
 ```
-
-##### Local development
 
 To use the library locally without publishing to a remote npm registry, first install the dependencies by changing into the directory containing `package.json` (and this README). Let's call this `JAVASCRIPT_CLIENT_DIR`. Then run:
 
@@ -324,7 +324,7 @@ To access the user information, use the `UserApi, ApiClient` classes exported fr
 
 ```javascript
 ...
-import { ..., UserApi, ApiClient, ... } from '@kinde-oss/react-native-sdk-0-5x';
+import { ..., OAuthApi, ApiClient, ... } from '@kinde-oss/react-native-sdk-0-5x';
 ...
 
 state = {
@@ -343,8 +343,8 @@ constructor() {
 
 
 getUserProfile() {
-  const apiInstance = new UserApi(this.state.apiClient)
-  apiInstance.getUserProfile((err, data, response) => {
+  const apiInstance = new OAuthApi(this.state.apiClient)
+  apiInstance.getUser({}, (err, data, response) => {
     if (err) {
       console.error(err)
       return;
@@ -388,16 +388,28 @@ The simplest way to run the JavaScript test suite is by using the following comm
 npm test
 ```
 
+_Note: Ensure you have already run `npm install` before_
+
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://app.kinde.com*
+All URIs are relative to *https://app.kinde.com/api/v1*
 
-| Class                                        | Method                                               | HTTP request                 | Description                  |
-| -------------------------------------------- | ---------------------------------------------------- | ---------------------------- | ---------------------------- |
-| _@kinde-oss/react-native-sdk-0-5x.UserApi_ | [**getUserProfile**](docs/UserApi.md#getUserProfile) | **GET** /oauth2/user_profile | Returns current user profile |
+| Class                                       | Method                                                    | HTTP request                    | Description                                                 |
+| ------------------------------------------- | --------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------- |
+| _@kinde-oss/react-native-sdk-0-5x.OAuthApi_ | [**getUser**](docs/OAuthApi.md#getUser)                   | **GET** /oauth2/user_profile    | Returns the details of the currently logged in user         |
+| _@kinde-oss/react-native-sdk-0-5x.OAuthApi_ | [**getUserProfileV2**](docs/OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user         |
+| _@kinde-oss/react-native-sdk-0-5x.UsersApi_ | [**createUser**](docs/UsersApi.md#createUser)             | **POST** /user                  | Creates a user record                                       |
+| _@kinde-oss/react-native-sdk-0-5x.UsersApi_ | [**getUsers**](docs/UsersApi.md#getUsers)                 | **GET** /users                  | Returns a paginated list of end-user records for a business |
 
 ## Documentation for Models
 
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUser200Response](docs/CreateUser200Response.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequest](docs/CreateUserRequest.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInner](docs/CreateUserRequestIdentitiesInner.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInnerDetails](docs/CreateUserRequestIdentitiesInnerDetails.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestProfile](docs/CreateUserRequestProfile.md)
 -   [@kinde-oss/react-native-sdk-0-5x.User](docs/User.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserIdentity](docs/UserIdentity.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserIdentityResult](docs/UserIdentityResult.md)
 -   [@kinde-oss/react-native-sdk-0-5x.UserProfile](docs/UserProfile.md)
--   [@kinde-oss/react-native-sdk-0-5x.Users](docs/Users.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserProfileV2](docs/UserProfileV2.md)
