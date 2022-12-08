@@ -377,29 +377,36 @@ const permissions = [
     'delete:tasks'
 ];
 ```
+
 We provide helper functions to more easily access permissions:
+
 ```javascript
-this.state.client.getPermission("create:todos");
+this.state.client.getPermission('create:todos');
 // {orgCode: "org_1234", isGranted: true}
 
 this.state.client.getPermissions();
 // {orgCode: "org_1234", permissions: ["create:todos", "update:todos", "read:todos"]}
 ```
+
 A practical example in code might look something like:
+
 ```
 if (this.state.client.getPermission("create:todos").isGranted) {
     // show Create Todo button in UI
 }
 ```
+
 ### Audience
+
 An `audience` is the intended recipient of an access token - for example the API for your application. The audience argument can be passed to the Kinde client to request an audience be added to the provided token.
 
 The audience of a token is the intended recipient of the token.
+
 ```javascript
 ...
 state = {
   ...
-  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI, YOUR_SCOPES, 
+  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI, YOUR_SCOPES,
   {
     audience: 'api.yourapp.com'
   })
@@ -407,16 +414,20 @@ state = {
 }
 ...
 ```
+
 For details on how to connect, see [Register an API](https://kinde.com/docs/developer-tools/register-an-api/)
 
 ### Overriding scope
+
 By default the KindeSDK SDK requests the following scopes:
-- profile
-- email
-- offline
-- openid
+
+-   profile
+-   email
+-   offline
+-   openid
 
 You can override this by passing scope into the KindeSDK
+
 ```javascript
 ...
 state = {
@@ -428,19 +439,23 @@ state = {
 ```
 
 ### Getting claims
+
 We have provided a helper to grab any claim from your id or access tokens. The helper defaults to access tokens:
+
 ```javascript
-this.state.client.getClaim("aud");
+this.state.client.getClaim('aud');
 // ["api.yourapp.com"]
 
-this.state.client.getClaim("given_name", "id_token");
+this.state.client.getClaim('given_name', 'id_token');
 // "David"
 ```
 
-
 ### Organizations Control
+
 #### Create an organization
+
 To have a new organization created within your application, you will need to run a similar function to below:
+
 ```javascript
 <Button title="Create Organization" onPress={this.handleSignIn} />
 ```
@@ -467,35 +482,37 @@ this.state.client.createOrg({org_name: 'Your Organization'});
 ```
 
 #### Sign and sign in to organizations
+
 Kinde has a unique code for every organization. You’ll have to pass this code through when you register a new user. Example function below:
+
 ```javascript
-this.state.client.register({org_code: 'your_org_code'});
+this.state.client.register({ org_code: 'your_org_code' });
 ```
+
 If you want a user to sign into a particular organization, pass this code along with the sign in method.
+
 ```javascript
-this.state.client.login({org_code: 'your_org_code'});
+this.state.client.login({ org_code: 'your_org_code' });
 ```
 
 Following authentication, Kinde provides a json web token (jwt) to your application. Along with the standard information we also include the org_code and the permissions for that organization (this is important as a user can belong to multiple organizations and have different permissions for each). Example of a returned token:
+
 ```json
 {
-	"aud": [],
-	"exp": 1658475930,
-	"iat": 1658472329,
-	"iss": "https://your_subdomain.kinde.com",
-	"jti": "123457890",
-	"org_code": "org_1234",
-	"permissions": ["read:todos", "create:todos"],
-	"scp": [
-		"openid",
-		"profile",
-		"email",
-		"offline"
-	],
-	"sub": "kp:123457890"
+    "aud": [],
+    "exp": 1658475930,
+    "iat": 1658472329,
+    "iss": "https://your_subdomain.kinde.com",
+    "jti": "123457890",
+    "org_code": "org_1234",
+    "permissions": ["read:todos", "create:todos"],
+    "scp": ["openid", "profile", "email", "offline"],
+    "sub": "kp:123457890"
 }
 ```
+
 The id_token will also contain an array of Organizations that a user belongs to - this is useful if you wanted to build out an organization switcher for example.
+
 ```json
 {
 ...
@@ -503,7 +520,9 @@ The id_token will also contain an array of Organizations that a user belongs to 
 ...
 }
 ```
+
 There are two helper functions you can use to extract information:
+
 ```javascript
 this.state.client.getOrganization();
 // {orgCode: "org_1234"}
@@ -511,6 +530,7 @@ this.state.client.getOrganization();
 this.state.client.getUserOrganizations();
 // {orgCodes: ["org_1234", "org_abcd"]}
 ```
+
 ## How to run test
 
 The simplest way to run the JavaScript test suite is by using the following command at the root of your React Native checkout:
@@ -522,6 +542,7 @@ npm test
 _Note: Ensure you have already run `npm install` before_
 
 ## SDK API Reference
+
 | Property                        | Type    | Is required | Default        | Description                                                                                                       |
 | ------------------------------- | ------- | ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
 | issuer                          | string  | Yes         |                | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
@@ -530,22 +551,23 @@ _Note: Ensure you have already run `npm install` before_
 | logoutRedirectUri               | string  | No          |                | Where your user will be redirected upon logout                                                                    |
 | scope                           | boolean | No          | openid offline | The scopes to be requested from Kinde                                                                             |
 | additionalParameters            | object  | No          | {}             | Additional parameters that will be passed in the authorization request                                            |
-| additionalParameters - audience | string  | No          |                | The audience claim for the JWT    
+| additionalParameters - audience | string  | No          |                | The audience claim for the JWT                                                                                    |
 
 ## KindeSDK methods
-| Property             | Description                                                                                       | Arguments                        | Usage                                                                         | Sample output                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| login                | Constructs redirect url and sends user to Kinde to sign in                                        | org\_code?: string               | kinde.login();                                                                |                                                                                       |
-| register             | Constructs redirect url and sends user to Kinde to sign up                                        | org\_code?: string               | kinde.register();                                                             |                                                                                       |
-| logout               | Logs the user out of Kinde                                                                        |                                  | kinde.logout();                                                               |                                                                                       |
-| getToken             | Returns the raw Access token from URL after logged from Kinde                                     | url: string                      | kinde.getToken(url);                                                          | eyJhbGciOiJIUzI1...                                                                   |
-| createOrg            | Constructs redirect url and sends user to Kinde to sign up and create a new org for your business | org\_name?: string               | kinde.createOrg(); or kinde.createOrg({org\_name: 'your organization name'}); | redirect                                                                              |
-| getClaim             | Gets a claim from an access or id token                                                           | claim: string, tokenKey?: string | kinde.getClaim('given\_name', 'id\_token');                                   | "David"                                                                               |
-| getPermission        | Returns the state of a given permission                                                           | key: string                      | kinde.getPermission('read:todos');                                            | {orgCode: "org\_1234", isGranted: true}                                               |
-| getPermissions       | Returns all permissions for the current user for the organization they are logged into            |                                  | kinde.getPermissions();                                                       | {orgCode: "org\_1234", permissions: \["create:todos", "update:todos", "read:todos"\]} |
-| getOrganization      | Get details for the organization your user is logged into                                         |                                  | kinde.getOrganization();                                                      | {orgCode: "org\_1234"}                                                                |
-| getUserDetails       | Returns the profile for the current user                                                          |                                  | kinde.getUserDetails();                                                       | {given\_name: "Dave"; id: "abcdef"; family\_name: "Smith"; email: "dave@smith.com"}   |
-| getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                 | {orgCodes: \["org\_1234", "org\_5678"\]}                                              |
+
+| Property             | Description                                                                                       | Arguments                        | Usage                                                                        | Sample output                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| login                | Constructs redirect url and sends user to Kinde to sign in                                        | org_code?: string                | kinde.login();                                                               |                                                                                      |
+| register             | Constructs redirect url and sends user to Kinde to sign up                                        | org_code?: string                | kinde.register();                                                            |                                                                                      |
+| logout               | Logs the user out of Kinde                                                                        |                                  | kinde.logout();                                                              |                                                                                      |
+| getToken             | Returns the raw Access token from URL after logged from Kinde                                     | url: string                      | kinde.getToken(url);                                                         | eyJhbGciOiJIUzI1...                                                                  |
+| createOrg            | Constructs redirect url and sends user to Kinde to sign up and create a new org for your business | org_name?: string                | kinde.createOrg(); or kinde.createOrg({org_name: 'your organization name'}); | redirect                                                                             |
+| getClaim             | Gets a claim from an access or id token                                                           | claim: string, tokenKey?: string | kinde.getClaim('given_name', 'id_token');                                    | "David"                                                                              |
+| getPermission        | Returns the state of a given permission                                                           | key: string                      | kinde.getPermission('read:todos');                                           | {orgCode: "org_1234", isGranted: true}                                               |
+| getPermissions       | Returns all permissions for the current user for the organization they are logged into            |                                  | kinde.getPermissions();                                                      | {orgCode: "org_1234", permissions: \["create:todos", "update:todos", "read:todos"\]} |
+| getOrganization      | Get details for the organization your user is logged into                                         |                                  | kinde.getOrganization();                                                     | {orgCode: "org_1234"}                                                                |
+| getUserDetails       | Returns the profile for the current user                                                          |                                  | kinde.getUserDetails();                                                      | {given_name: "Dave"; id: "abcdef"; family_name: "Smith"; email: "dave@smith.com"}    |
+| getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                | {orgCodes: \["org_1234", "org_5678"\]}                                               |
 
 If you need any assistance with getting Kinde connected reach out to us at support@kinde.com.
 
