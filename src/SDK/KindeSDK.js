@@ -262,13 +262,13 @@ export default class KindeSDK {
 
     getOrganization() {
         return {
-            orgCode: this.getClaims()['org_code']
+            orgCode: this.getClaim('org_code')
         };
     }
 
     getUserOrganizations() {
         return {
-            orgCodes: this.getClaims('id_token')['org_codes']
+            orgCodes: this.getClaim('org_codes', 'id_token')
         };
     }
 

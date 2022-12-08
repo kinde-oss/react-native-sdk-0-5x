@@ -99,6 +99,9 @@ const AdditionalParametersAllow = {
  * @returns the additionalParameters object if it exists.
  */
 export const checkAdditionalParameters = (additionalParameters) => {
+    if (typeof additionalParameters !== 'object') {
+        throw new UnexpectedException('additionalParameters');
+    }
     const keyExists = Object.keys(additionalParameters);
     if (keyExists.length) {
         const keysAllow = Object.keys(AdditionalParametersAllow);
@@ -118,21 +121,24 @@ export const checkAdditionalParameters = (additionalParameters) => {
         }
         return additionalParameters;
     }
+    return {};
 };
 
 /**
- * It takes two parameters, a target object and an additional parameters object. It then checks if the
- * additional parameters object has any keys. If it does, it loops through each key and adds it to the
- * target object
- * @param target - The target object that we want to add the additional parameters to.
- * @param additionalParameters - This is an object that contains additional parameters that you want to
- * pass to the API.
+ * It takes two objects as arguments, and adds the properties of the second object to the first object
+ * @param target - The target object that you want to add the additional parameters to.
+ * @param additionalParameters - This is the object that contains the additional parameters that you
+ * want to add to the target object.
+ * @returns the target object with the additional parameters added to it.
  */
 export const addAdditionalParameters = (target, additionalParameters) => {
-    const keyExists = Object.keys(additionalParameters);
+    const newAdditionalParameters =
+        checkAdditionalParameters(additionalParameters);
+    const keyExists = Object.keys(newAdditionalParameters);
     if (keyExists.length) {
         keyExists.forEach((key) => {
-            target[key] = additionalParameters[key];
+            target[key] = newAdditionalParameters[key];
         });
     }
+    return target;
 };
