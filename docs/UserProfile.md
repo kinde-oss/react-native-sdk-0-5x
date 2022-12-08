@@ -1,4 +1,4 @@
-# @KindeOssReactNativeSdkLt06.UserProfile
+# @KindeOssReactNativeSdk05x.UserProfile
 
 ## Properties
 
@@ -6,5 +6,6 @@
 | ------------------ | ---------- | ----------- | ---------- |
 | **id**             | **String** |             | [optional] |
 | **preferredEmail** | **String** |             | [optional] |
+| **providedId**     | **String** |             | [optional] |
 | **lastName**       | **String** |             | [optional] |
 | **firstName**      | **String** |             | [optional] |
