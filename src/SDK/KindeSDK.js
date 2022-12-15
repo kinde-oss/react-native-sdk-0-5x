@@ -63,6 +63,7 @@ export default class KindeSDK {
         this.scope = scope;
 
         this.clientSecret = '';
+
         this.authStatus = authStatusConstants.UNAUTHENTICATED;
     }
 
@@ -75,8 +76,10 @@ export default class KindeSDK {
     login(additionalParameters = {}) {
         checkAdditionalParameters(additionalParameters);
         this.cleanUp();
+
         const auth = new AuthorizationCode();
         this.updateAuthStatus(authStatusConstants.AUTHENTICATING);
+
         const additionalParametersMerged = {
             ...this.additionalParameters,
             ...additionalParameters
@@ -95,15 +98,19 @@ export default class KindeSDK {
             try {
                 if (this.checkIsUnAuthenticated()) {
                     reject(new UnAuthenticatedException());
+                    return;
                 }
                 checkNotNull(url, 'URL');
+
                 const URLParsed = Url(url, true);
                 const { code, error, error_description } = URLParsed.query;
                 if (error) {
                     const msg = error_description ? error_description : error;
                     reject(msg);
+                    return;
                 }
                 checkNotNull(code, 'code');
+
                 const formData = new FormData();
                 formData.append('code', code);
                 formData.append('client_id', this.clientId);
@@ -118,37 +125,31 @@ export default class KindeSDK {
                 if (codeVerifier) {
                     formData.append('code_verifier', codeVerifier);
                 }
-                fetch(this.tokenEndpoint, {
+
+                const response = await fetch(this.tokenEndpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
                     body: formData
-                })
-                    .then((response) => response.json())
-                    .then(async (responseJson) => {
-                        if (responseJson.error) {
-                            return reject(responseJson);
-                        }
-                        this.saveUserDetails(responseJson.id_token);
-                        Storage.setAccessToken(responseJson.access_token);
-                        Storage.setIdToken(responseJson.id_token);
-                        this.updateAuthStatus(
-                            authStatusConstants.AUTHENTICATED
-                        );
-                        setTimeout(() => {
-                            this.updateAuthStatus(
-                                authStatusConstants.UNAUTHENTICATED
-                            );
-                        }, 10000); // Convert second to milliseconds (responseJson.expires_in * 1000)
-                        resolve(responseJson);
-                    })
-                    .catch((err) => {
-                        this.updateAuthStatus(
-                            authStatusConstants.UNAUTHENTICATED
-                        );
-                        reject(err.response.data);
-                    });
+                });
+
+                const dataResponse = await response.json();
+                if (dataResponse.error) {
+                    reject(dataResponse);
+                    return;
+                }
+
+                this.saveUserDetails(dataResponse.id_token);
+                Storage.setAccessToken(dataResponse.access_token);
+                Storage.setIdToken(dataResponse.id_token);
+                this.updateAuthStatus(authStatusConstants.AUTHENTICATED);
+
+                const now = new Date().getTime();
+                const expiredAt = now + dataResponse.expires_in * 1000;
+                Storage.setExpiredAt(expiredAt);
+
+                resolve(dataResponse);
             } catch (error) {
                 this.updateAuthStatus(authStatusConstants.UNAUTHENTICATED);
                 reject(error);
@@ -182,7 +183,7 @@ export default class KindeSDK {
         this.cleanUp();
         const URLParsed = Url(this.logoutEndpoint, true);
         URLParsed.query['redirect'] = this.logoutRedirectUri;
-        Linking.openURL(URLParsed.toString());
+        return Linking.openURL(URLParsed.toString());
     }
 
     cleanUp() {
@@ -217,6 +218,7 @@ export default class KindeSDK {
             Storage.removeItem('userProfile');
             return;
         }
+
         const token = jwt_decode(idToken);
         Storage.setUserProfile({
             id: token.sub,
@@ -273,7 +275,13 @@ export default class KindeSDK {
     }
 
     get isAuthenticated() {
-        return !this.checkIsUnAuthenticated();
+        if (this.checkIsUnAuthenticated()) {
+            return false;
+        }
+
+        const timeExpired = Number(Storage.getExpiredAt());
+        const now = new Date().getTime();
+        return timeExpired > now;
     }
 
     get authorizationEndpoint() {
