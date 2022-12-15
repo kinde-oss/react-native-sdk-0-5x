@@ -43,6 +43,6 @@ export default class AuthorizationCode {
             URLParsed.query['code_challenge_method'] = 'S256';
             Storage.setCodeVerifier(challenge.codeVerifier);
         }
-        Linking.openURL(URLParsed.toString());
+        return Linking.openURL(URLParsed.toString());
     }
 }

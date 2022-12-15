@@ -62,6 +62,7 @@ export const generateChallenge = () => {
     const state = generateRandomString();
     const codeVerifier = generateRandomString();
     const codeChallenge = base64URLEncode(sha256(codeVerifier));
+
     return {
         state,
         codeVerifier,
@@ -82,6 +83,7 @@ export const checkNotNull = (reference, name) => {
     if (reference === null || reference === undefined) {
         throw new PropertyRequiredException(name);
     }
+
     return reference;
 };
 
@@ -102,6 +104,7 @@ export const checkAdditionalParameters = (additionalParameters) => {
     if (typeof additionalParameters !== 'object') {
         throw new UnexpectedException('additionalParameters');
     }
+
     const keyExists = Object.keys(additionalParameters);
     if (keyExists.length) {
         const keysAllow = Object.keys(AdditionalParametersAllow);
@@ -109,6 +112,7 @@ export const checkAdditionalParameters = (additionalParameters) => {
             if (!keysAllow.includes(key)) {
                 throw new UnexpectedException(key);
             }
+
             if (
                 typeof additionalParameters[key] !==
                 AdditionalParametersAllow[key]
@@ -119,8 +123,10 @@ export const checkAdditionalParameters = (additionalParameters) => {
                 );
             }
         }
+
         return additionalParameters;
     }
+
     return {};
 };
 
@@ -134,11 +140,13 @@ export const checkAdditionalParameters = (additionalParameters) => {
 export const addAdditionalParameters = (target, additionalParameters) => {
     const newAdditionalParameters =
         checkAdditionalParameters(additionalParameters);
+
     const keyExists = Object.keys(newAdditionalParameters);
     if (keyExists.length) {
         keyExists.forEach((key) => {
             target[key] = newAdditionalParameters[key];
         });
     }
+
     return target;
 };
