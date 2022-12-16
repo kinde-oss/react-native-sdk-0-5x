@@ -2,12 +2,10 @@
 
 All URIs are relative to *https://app.kinde.com/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**getUser**](OAuthApi.md#getUser) | **GET** /oauth2/user_profile | Returns the details of the currently logged in user
-[**getUserProfileV2**](OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user
-
-
+| Method                                               | HTTP request                    | Description                                         |
+| ---------------------------------------------------- | ------------------------------- | --------------------------------------------------- |
+| [**getUser**](OAuthApi.md#getUser)                   | **GET** /oauth2/user_profile    | Returns the details of the currently logged in user |
+| [**getUserProfileV2**](OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user |
 
 ## getUser
 
@@ -15,7 +13,7 @@ Method | HTTP request | Description
 
 Returns the details of the currently logged in user
 
-Contains the id, names and email of the currently logged in user 
+Contains the id, names and email of the currently logged in user
 
 ### Example
 
@@ -49,9 +47,8 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
+-   **Content-Type**: Not defined
+-   **Accept**: application/json
 
 ## getUserProfileV2
 
@@ -59,7 +56,7 @@ This endpoint does not need any parameter.
 
 Returns the details of the currently logged in user
 
-Contains the id, names and email of the currently logged in user 
+Contains the id, names and email of the currently logged in user
 
 ### Example
 
@@ -93,6 +90,5 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
+-   **Content-Type**: Not defined
+-   **Accept**: application/json

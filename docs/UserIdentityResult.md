@@ -2,9 +2,7 @@
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**created** | **Boolean** |  | [optional] 
-**identityId** | **Number** |  | [optional] 
-
-
+| Name           | Type        | Description | Notes      |
+| -------------- | ----------- | ----------- | ---------- |
+| **created**    | **Boolean** |             | [optional] |
+| **identityId** | **Number**  |             | [optional] |
