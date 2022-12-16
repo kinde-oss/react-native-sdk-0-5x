@@ -2,10 +2,12 @@
 
 All URIs are relative to *https://app.kinde.com/api/v1*
 
-| Method                                   | HTTP request   | Description                                                 |
-| ---------------------------------------- | -------------- | ----------------------------------------------------------- |
-| [**createUser**](UsersApi.md#createUser) | **POST** /user | Creates a user record                                       |
-| [**getUsers**](UsersApi.md#getUsers)     | **GET** /users | Returns a paginated list of end-user records for a business |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**createUser**](UsersApi.md#createUser) | **POST** /user | Creates a user record
+[**getUsers**](UsersApi.md#getUsers) | **GET** /users | Returns a paginated list of end-user records for a business
+
+
 
 ## createUser
 
@@ -13,7 +15,7 @@ All URIs are relative to *https://app.kinde.com/api/v1*
 
 Creates a user record
 
-Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user
+Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user 
 
 ### Example
 
@@ -28,20 +30,20 @@ let apiInstance = new @KindeOssReactNativeSdk05x.UsersApi();
 let opts = {
   'createUserRequest': new @KindeOssReactNativeSdk05x.CreateUserRequest() // CreateUserRequest | The details of the user to create
 };
-apiInstance.createUser(opts, (error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
+apiInstance.createUser(opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
 });
+
 ```
 
 ### Parameters
 
-| Name                  | Type                                          | Description                       | Notes      |
-| --------------------- | --------------------------------------------- | --------------------------------- | ---------- |
-| **createUserRequest** | [**CreateUserRequest**](CreateUserRequest.md) | The details of the user to create | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **createUserRequest** | [**CreateUserRequest**](CreateUserRequest.md)| The details of the user to create | [optional] 
 
 ### Return type
 
@@ -53,8 +55,9 @@ apiInstance.createUser(opts, (error, data, response) => {
 
 ### HTTP request headers
 
--   **Content-Type**: application/json
--   **Accept**: application/json
+- **Content-Type**: application/json
+- **Accept**: application/json
+
 
 ## getUsers
 
@@ -62,7 +65,7 @@ apiInstance.createUser(opts, (error, data, response) => {
 
 Returns a paginated list of end-user records for a business
 
-The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter.
+The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter. 
 
 ### Example
 
@@ -80,23 +83,23 @@ let opts = {
   'userId': 56, // Number | The id of the user to filter by
   'nextToken': "nextToken_example" // String | A string to get the next page of results if there are more results
 };
-apiInstance.getUsers(opts, (error, data, response) => {
-  if (error) {
-    console.error(error);
-  } else {
-    console.log('API called successfully. Returned data: ' + data);
-  }
+apiInstance.getUsers(opts).then((data) => {
+  console.log('API called successfully. Returned data: ' + data);
+}, (error) => {
+  console.error(error);
 });
+
 ```
 
 ### Parameters
 
-| Name          | Type       | Description                                                        | Notes      |
-| ------------- | ---------- | ------------------------------------------------------------------ | ---------- |
-| **sort**      | **String** | Describes the field and order to sort the result by                | [optional] |
-| **pageSize**  | **Number** | The number of items to return                                      | [optional] |
-| **userId**    | **Number** | The id of the user to filter by                                    | [optional] |
-| **nextToken** | **String** | A string to get the next page of results if there are more results | [optional] |
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **sort** | **String**| Describes the field and order to sort the result by | [optional] 
+ **pageSize** | **Number**| The number of items to return | [optional] 
+ **userId** | **Number**| The id of the user to filter by | [optional] 
+ **nextToken** | **String**| A string to get the next page of results if there are more results | [optional] 
 
 ### Return type
 
@@ -108,5 +111,6 @@ apiInstance.getUsers(opts, (error, data, response) => {
 
 ### HTTP request headers
 
--   **Content-Type**: Not defined
--   **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
+

@@ -389,14 +389,6 @@ class ApiClient {
     }
 
     /**
-     * Callback function to receive the result of the operation.
-     * @callback module:ApiClient~callApiCallback
-     * @param {String} error Error message, if any.
-     * @param data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
      * Invokes the REST service using the supplied settings and parameters.
      * @param {String} path The base URL to invoke.
      * @param {String} httpMethod The HTTP method to use.
@@ -411,10 +403,9 @@ class ApiClient {
      * @param {(String|Array|ObjectFunction)} returnType The required type to return; can be a string for simple types or the
      * constructor for a complex type.
      * @param {String} apiBasePath base path defined in the operation/path level to override the default one
-     * @param {module:ApiClient~callApiCallback} callback The callback function.
-     * @returns {Object} The SuperAgent request object.
+     * @returns {Promise} A {@link https://www.promisejs.org/|Promise} object.
      */
-    async callApi(
+    callApi(
         path,
         httpMethod,
         pathParams,
@@ -426,8 +417,7 @@ class ApiClient {
         contentTypes,
         accepts,
         returnType,
-        apiBasePath,
-        callback
+        apiBasePath
     ) {
         var url = this.buildUrl(path, pathParams, apiBasePath);
         var request = superagent(httpMethod, url);
@@ -529,21 +519,37 @@ class ApiClient {
                 request.withCredentials();
             }
         }
-        request
-            .then((response) => {
-                var data = null;
-                var error = null;
-                try {
-                    data = this.deserialize(response, returnType);
-                    if (this.enableCookies && typeof window === 'undefined') {
-                        this.agent._saveCookies(response);
+
+        return new Promise((resolve, reject) => {
+            request.end((error, response) => {
+                if (error) {
+                    var err = {};
+                    if (response) {
+                        err.status = response.status;
+                        err.statusText = response.statusText;
+                        err.body = response.body;
+                        err.response = response;
                     }
-                } catch (err) {
-                    error = err;
+                    err.error = error;
+
+                    reject(err);
+                } else {
+                    try {
+                        var data = this.deserialize(response, returnType);
+                        if (
+                            this.enableCookies &&
+                            typeof window === 'undefined'
+                        ) {
+                            this.agent._saveCookies(response);
+                        }
+
+                        resolve({ data, response });
+                    } catch (err) {
+                        reject(err);
+                    }
                 }
-                callback(error, data, response);
-            })
-            .catch((error) => callback(error));
+            });
+        });
     }
 
     /**

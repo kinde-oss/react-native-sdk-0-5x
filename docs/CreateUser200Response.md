@@ -2,8 +2,10 @@
 
 ## Properties
 
-| Name           | Type                                  | Description | Notes      |
-| -------------- | ------------------------------------- | ----------- | ---------- |
-| **id**         | **String**                            |             | [optional] |
-| **created**    | **Boolean**                           |             | [optional] |
-| **identities** | [**[UserIdentity]**](UserIdentity.md) |             | [optional] |
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**id** | **String** |  | [optional] 
+**created** | **Boolean** |  | [optional] 
+**identities** | [**[UserIdentity]**](UserIdentity.md) |  | [optional] 
+
+

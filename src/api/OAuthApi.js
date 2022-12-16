@@ -33,21 +33,11 @@ export default class OAuthApi {
     }
 
     /**
-     * Callback function to receive the result of the getUser operation.
-     * @callback module:api/OAuthApi~getUserCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/UserProfile} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
      * Returns the details of the currently logged in user
      * Contains the id, names and email of the currently logged in user
-     * @param {module:api/OAuthApi~getUserCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/UserProfile}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserProfile} and HTTP response
      */
-    getUser(opts, callback) {
-        opts = opts || {};
+    getUserWithHttpInfo() {
         let postBody = null;
 
         let pathParams = {};
@@ -71,27 +61,26 @@ export default class OAuthApi {
             contentTypes,
             accepts,
             returnType,
-            null,
-            callback
+            null
         );
     }
 
     /**
-     * Callback function to receive the result of the getUserProfileV2 operation.
-     * @callback module:api/OAuthApi~getUserProfileV2Callback
-     * @param {String} error Error message, if any.
-     * @param {module:model/UserProfileV2} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * Returns the details of the currently logged in user
+     * Contains the id, names and email of the currently logged in user
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserProfile}
      */
+    async getUser() {
+        const response = await this.getUserWithHttpInfo();
+        return response.data;
+    }
 
     /**
      * Returns the details of the currently logged in user
      * Contains the id, names and email of the currently logged in user
-     * @param {module:api/OAuthApi~getUserProfileV2Callback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/UserProfileV2}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/UserProfileV2} and HTTP response
      */
-    getUserProfileV2(opts, callback) {
-        opts = opts || {};
+    getUserProfileV2WithHttpInfo() {
         let postBody = null;
 
         let pathParams = {};
@@ -115,8 +104,17 @@ export default class OAuthApi {
             contentTypes,
             accepts,
             returnType,
-            null,
-            callback
+            null
         );
+    }
+
+    /**
+     * Returns the details of the currently logged in user
+     * Contains the id, names and email of the currently logged in user
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/UserProfileV2}
+     */
+    async getUserProfileV2() {
+        const response = await this.getUserProfileV2WithHttpInfo();
+        return response.data;
     }
 }

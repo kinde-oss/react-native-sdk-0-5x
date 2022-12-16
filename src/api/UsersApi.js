@@ -34,22 +34,13 @@ export default class UsersApi {
     }
 
     /**
-     * Callback function to receive the result of the createUser operation.
-     * @callback module:api/UsersApi~createUserCallback
-     * @param {String} error Error message, if any.
-     * @param {module:model/CreateUser200Response} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
-     */
-
-    /**
      * Creates a user record
      * Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user
      * @param {Object} opts Optional parameters
      * @param {module:model/CreateUserRequest} opts.createUserRequest The details of the user to create
-     * @param {module:api/UsersApi~createUserCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link module:model/CreateUser200Response}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link module:model/CreateUser200Response} and HTTP response
      */
-    createUser(opts, callback) {
+    createUserWithHttpInfo(opts) {
         opts = opts || {};
         let postBody = opts['createUserRequest'];
 
@@ -74,31 +65,33 @@ export default class UsersApi {
             contentTypes,
             accepts,
             returnType,
-            null,
-            callback
+            null
         );
     }
 
     /**
-     * Callback function to receive the result of the getUsers operation.
-     * @callback module:api/UsersApi~getUsersCallback
-     * @param {String} error Error message, if any.
-     * @param {Array.<module:model/User>} data The data returned by the service call.
-     * @param {String} response The complete HTTP response.
+     * Creates a user record
+     * Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user
+     * @param {Object} opts Optional parameters
+     * @param {module:model/CreateUserRequest} opts.createUserRequest The details of the user to create
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link module:model/CreateUser200Response}
      */
+    async createUser(opts) {
+        const response = await this.createUserWithHttpInfo(opts);
+        return response.data;
+    }
 
     /**
      * Returns a paginated list of end-user records for a business
      * The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter.
      * @param {Object} opts Optional parameters
-     * @param {module:model/String} opts.sort Describes the field and order to sort the result by
+     * @param {String} opts.sort Describes the field and order to sort the result by
      * @param {Number} opts.pageSize The number of items to return
      * @param {Number} opts.userId The id of the user to filter by
      * @param {String} opts.nextToken A string to get the next page of results if there are more results
-     * @param {module:api/UsersApi~getUsersCallback} callback The callback function, accepting three arguments: error, data, response
-     * data is of type: {@link Array.<module:model/User>}
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with an object containing data of type {@link Array.<module:model/User>} and HTTP response
      */
-    getUsers(opts, callback) {
+    getUsersWithHttpInfo(opts) {
         opts = opts || {};
         let postBody = null;
 
@@ -128,8 +121,22 @@ export default class UsersApi {
             contentTypes,
             accepts,
             returnType,
-            null,
-            callback
+            null
         );
+    }
+
+    /**
+     * Returns a paginated list of end-user records for a business
+     * The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter.
+     * @param {Object} opts Optional parameters
+     * @param {String} opts.sort Describes the field and order to sort the result by
+     * @param {Number} opts.pageSize The number of items to return
+     * @param {Number} opts.userId The id of the user to filter by
+     * @param {String} opts.nextToken A string to get the next page of results if there are more results
+     * @return {Promise} a {@link https://www.promisejs.org/|Promise}, with data of type {@link Array.<module:model/User>}
+     */
+    async getUsers(opts) {
+        const response = await this.getUsersWithHttpInfo(opts);
+        return response.data;
     }
 }
