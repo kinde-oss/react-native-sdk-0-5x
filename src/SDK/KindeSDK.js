@@ -94,66 +94,59 @@ export default class KindeSDK {
      * @returns A promise that resolves to a responseJson object.
      */
     getToken(url) {
+        if (this.checkIsUnAuthenticated()) {
+            throw new UnAuthenticatedException();
+        }
+        checkNotNull(url, 'URL');
+
+        const URLParsed = Url(url, true);
+        const { code, error, error_description } = URLParsed.query;
+        if (error) {
+            const msg = error_description ? error_description : error;
+            throw new UnAuthenticatedException(msg);
+        }
+        checkNotNull(code, 'code');
+
+        const formData = new FormData();
+        formData.append('code', code);
+        formData.append('client_id', this.clientId);
+        formData.append('client_secret', this.clientSecret);
+        formData.append('grant_type', 'authorization_code');
+        formData.append('redirect_uri', this.redirectUri);
+        const state = Storage.getState();
+        if (state) {
+            formData.append('state', state);
+        }
+        const codeVerifier = Storage.getCodeVerifier();
+        if (codeVerifier) {
+            formData.append('code_verifier', codeVerifier);
+        }
+
         return new Promise(async (resolve, reject) => {
-            try {
-                if (this.checkIsUnAuthenticated()) {
-                    reject(new UnAuthenticatedException());
-                    return;
-                }
-                checkNotNull(url, 'URL');
+            const response = await fetch(this.tokenEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: formData
+            });
 
-                const URLParsed = Url(url, true);
-                const { code, error, error_description } = URLParsed.query;
-                if (error) {
-                    const msg = error_description ? error_description : error;
-                    reject(msg);
-                    return;
-                }
-                checkNotNull(code, 'code');
-
-                const formData = new FormData();
-                formData.append('code', code);
-                formData.append('client_id', this.clientId);
-                formData.append('client_secret', this.clientSecret);
-                formData.append('grant_type', 'authorization_code');
-                formData.append('redirect_uri', this.redirectUri);
-                const state = Storage.getState();
-                if (state) {
-                    formData.append('state', state);
-                }
-                const codeVerifier = Storage.getCodeVerifier();
-                if (codeVerifier) {
-                    formData.append('code_verifier', codeVerifier);
-                }
-
-                const response = await fetch(this.tokenEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    },
-                    body: formData
-                });
-
-                const dataResponse = await response.json();
-                if (dataResponse.error) {
-                    reject(dataResponse);
-                    return;
-                }
-
-                this.saveUserDetails(dataResponse.id_token);
-                Storage.setAccessToken(dataResponse.access_token);
-                Storage.setIdToken(dataResponse.id_token);
-                this.updateAuthStatus(authStatusConstants.AUTHENTICATED);
-
-                const now = new Date().getTime();
-                const expiredAt = now + dataResponse.expires_in * 1000;
-                Storage.setExpiredAt(expiredAt);
-
-                resolve(dataResponse);
-            } catch (error) {
-                this.updateAuthStatus(authStatusConstants.UNAUTHENTICATED);
-                reject(error);
+            const dataResponse = await response.json();
+            if (dataResponse.error) {
+                reject(dataResponse);
+                return;
             }
+
+            this.saveUserDetails(dataResponse.id_token);
+            Storage.setAccessToken(dataResponse.access_token);
+            Storage.setIdToken(dataResponse.id_token);
+            this.updateAuthStatus(authStatusConstants.AUTHENTICATED);
+
+            const now = new Date().getTime();
+            const expiredAt = now + dataResponse.expires_in * 1000;
+            Storage.setExpiredAt(expiredAt);
+
+            resolve(dataResponse);
         });
     }
 

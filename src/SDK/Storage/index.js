@@ -48,14 +48,6 @@ class Storage extends BaseStore {
         return this.setItem('expired_at', expiredAt || 0);
     }
 
-    getLoggedAt() {
-        return this.getItem('logged_at');
-    }
-
-    setLoggedAt(loggedAt) {
-        return this.setItem('logged_at', loggedAt || 0);
-    }
-
     getState() {
         return this.getItem('state');
     }

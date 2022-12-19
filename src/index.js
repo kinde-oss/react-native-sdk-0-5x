@@ -70,25 +70,25 @@ export {
 
     /**
      * The KindeSDK module.
-     * @property {module:KindeSDK}
+     * @property {module:SDK/KindeSDK}
      */
     KindeSDK,
 
     /**
      * The Storage SDK module.
-     * @property {module:Storage}
+     * @property {module:SDK/Storage}
      */
     Storage,
 
     /**
      * The Utils SDK module.
-     * @property {module:Utils}
+     * @property {module:SDK/Utils}
      */
     Utils,
 
     /**
      * The authStatusConstants SDK module.
-     * @property {module:authStatusConstants}
+     * @property {module:SDK/constants/authStatusConstants}
      */
     authStatusConstants,
 
