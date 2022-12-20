@@ -182,22 +182,21 @@ describe('KindeSDK', () => {
     });
     describe('Token', () => {
         test('throws an error when url is not passed', async () => {
-            await expect(globalClient.getToken()).rejects.toThrow(Error);
+            expect(() => globalClient.getToken()).toThrow(
+                'URL cannot be empty'
+            );
         });
         test('throws an error when missing code in query', async () => {
-            await expect(
+            expect(() =>
                 globalClient.getToken(configuration.redirectUri)
-            ).rejects.toThrow(Error);
+            ).toThrow('code cannot be empty');
         });
         test('throws an error when have error from callback', async () => {
-            expect.assertions(1);
-            try {
-                await globalClient.getToken(
+            expect(() =>
+                globalClient.getToken(
                     `${configuration.redirectUri}?code=random_code&error=invalid`
-                );
-            } catch (error) {
-                expect(error).toMatch('invalid');
-            }
+                )
+            ).toThrow(Error);
         });
         test('Get Token instance', async () => {
             await globalClient.login();
@@ -217,18 +216,19 @@ describe('KindeSDK', () => {
         test('Get user profile', async () => {
             const apiClient = new ApiClient(configuration.issuer);
             const apiInstance = new OAuthApi(apiClient);
-            jest.spyOn(apiClient, 'callApi').mockImplementation(() => {
-                return {
-                    id: 'kp:58ece9f68a7c4c098efc1cf45c774e16',
-                    last_name: 'test',
-                    first_name: 'user',
-                    provided_id: null,
-                    preferred_email: 'usertesting@yopmail.com'
-                };
-            });
-            await expect(apiInstance.getUserProfileV2()).toEqual(
-                fakeUserProfile
+            jest.spyOn(apiInstance, 'getUserProfileV2').mockImplementation(
+                () => {
+                    return {
+                        id: 'kp:58ece9f68a7c4c098efc1cf45c774e16',
+                        last_name: 'test',
+                        first_name: 'user',
+                        provided_id: null,
+                        preferred_email: 'usertesting@yopmail.com'
+                    };
+                }
             );
+            const data = await apiInstance.getUserProfileV2();
+            await expect(data).toEqual(fakeUserProfile);
         });
     });
     describe('Payload', () => {
