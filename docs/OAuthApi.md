@@ -2,10 +2,12 @@
 
 All URIs are relative to *https://app.kinde.com/api/v1*
 
-| Method                                               | HTTP request                    | Description                                         |
-| ---------------------------------------------------- | ------------------------------- | --------------------------------------------------- |
-| [**getUser**](OAuthApi.md#getUser)                   | **GET** /oauth2/user_profile    | Returns the details of the currently logged in user |
-| [**getUserProfileV2**](OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user |
+Method | HTTP request | Description
+------------- | ------------- | -------------
+[**getUser**](OAuthApi.md#getUser) | **GET** /oauth2/user_profile | Returns the details of the currently logged in user
+[**getUserProfileV2**](OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user
+
+
 
 ## getUser
 
@@ -13,7 +15,7 @@ All URIs are relative to *https://app.kinde.com/api/v1*
 
 Returns the details of the currently logged in user
 
-Contains the id, names and email of the currently logged in user
+Contains the id, names and email of the currently logged in user 
 
 ### Example
 
@@ -25,11 +27,8 @@ let kindeBearerAuth = defaultClient.authentications['kindeBearerAuth'];
 kindeBearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new @KindeOssReactNativeSdk05x.OAuthApi();
-apiInstance.getUser().then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.getUser();
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 
@@ -47,8 +46,9 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
--   **Content-Type**: Not defined
--   **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
 
 ## getUserProfileV2
 
@@ -56,7 +56,7 @@ This endpoint does not need any parameter.
 
 Returns the details of the currently logged in user
 
-Contains the id, names and email of the currently logged in user
+Contains the id, names and email of the currently logged in user 
 
 ### Example
 
@@ -68,11 +68,8 @@ let kindeBearerAuth = defaultClient.authentications['kindeBearerAuth'];
 kindeBearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new @KindeOssReactNativeSdk05x.OAuthApi();
-apiInstance.getUserProfileV2().then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.getUserProfileV2();
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 
@@ -90,5 +87,6 @@ This endpoint does not need any parameter.
 
 ### HTTP request headers
 
--   **Content-Type**: Not defined
--   **Accept**: application/json
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
