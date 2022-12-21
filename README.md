@@ -544,15 +544,15 @@ _Note: Ensure you have already run `npm install` before_
 
 ## SDK API Reference
 
-| Property                        | Type    | Is required | Default        | Description                                                                                                       |
-| ------------------------------- | ------- | ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
-| issuer                          | string  | Yes         |                | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
-| redirectUri                     | string  | Yes         |                | The url that the user will be returned to after authentication                                                    |
-| clientId                        | string  | Yes         |                | The id of your application - get this from the Kinde admin area                                                   |
-| logoutRedirectUri               | string  | No          |                | Where your user will be redirected upon logout                                                                    |
-| scope                           | boolean | No          | openid offline | The scopes to be requested from Kinde                                                                             |
-| additionalParameters            | object  | No          | {}             | Additional parameters that will be passed in the authorization request                                            |
-| additionalParameters - audience | string  | No          |                | The audience claim for the JWT                                                                                    |
+| Property                        | Type    | Is required | Default                      | Description                                                                                                       |
+| ------------------------------- | ------- | ----------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| issuer                          | string  | Yes         |                              | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
+| redirectUri                     | string  | Yes         |                              | The url that the user will be returned to after authentication                                                    |
+| clientId                        | string  | Yes         |                              | The id of your application - get this from the Kinde admin area                                                   |
+| logoutRedirectUri               | string  | No          |                              | Where your user will be redirected upon logout                                                                    |
+| scope                           | boolean | No          | openid profile email offline | The scopes to be requested from Kinde                                                                             |
+| additionalParameters            | object  | No          | {}                           | Additional parameters that will be passed in the authorization request                                            |
+| additionalParameters - audience | string  | No          |                              | The audience claim for the JWT                                                                                    |
 
 ## KindeSDK methods
 
