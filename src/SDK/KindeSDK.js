@@ -34,7 +34,7 @@ export default class KindeSDK {
      * @param redirectUri - The URI that the user will be redirected to after a successful login.
      * @param clientId - The client ID of your application.
      * @param logoutRedirectUri - The URL to redirect to after logout.
-     * @param [scope=openid offline] - The scope of the access request.
+     * @param [scope=openid profile email offline] - The scope of the access request.
      * @param [additionalParameters] - Any additional parameters you want to pass to the authorization
      * server.
      */
@@ -43,7 +43,7 @@ export default class KindeSDK {
         redirectUri,
         clientId,
         logoutRedirectUri,
-        scope = 'openid offline',
+        scope = 'openid profile email offline',
         additionalParameters = {}
     ) {
         this.issuer = issuer;

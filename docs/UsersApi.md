@@ -28,11 +28,8 @@ let apiInstance = new @KindeOssReactNativeSdk05x.UsersApi();
 let opts = {
   'createUserRequest': new @KindeOssReactNativeSdk05x.CreateUserRequest() // CreateUserRequest | The details of the user to create
 };
-apiInstance.createUser(opts).then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.createUser(opts);
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 
@@ -79,11 +76,8 @@ let opts = {
   'userId': 56, // Number | The id of the user to filter by
   'nextToken': "nextToken_example" // String | A string to get the next page of results if there are more results
 };
-apiInstance.getUsers(opts).then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.getUsers(opts);
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 

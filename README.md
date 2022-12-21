@@ -320,7 +320,7 @@ handleLogout() {
 
 **\*Note warning:** Before you call the API, please make sure that you've already authenticated. If not, errors will appear there.\*
 
-To access the user information, use the `UserApi, ApiClient` classes exported from `@kinde-oss/react-native-sdk-0-5x`, then call the `getUserProfile` method of `UserApi` instance
+To access the user information, use the `OAuthApi`, `ApiClient` classes exported from `@kinde-oss/react-native-sdk-0-5x`, then call the `getUser` method of `OAuthApi` instance
 
 ```javascript
 ...
@@ -342,15 +342,10 @@ constructor() {
 
 
 
-getUserProfile() {
+async getUserProfile() {
   const apiInstance = new OAuthApi(this.state.apiClient)
-  apiInstance.getUser({}, (err, data, response) => {
-    if (err) {
-      console.error(err)
-      return;
-    }
-    console.log(data);
-  });
+  const data = await apiInstance.getUser();
+  console.log('API called successfully. Returned data: ' + data);
 }
 
 ```
@@ -532,6 +527,7 @@ this.state.client.getUserOrganizations();
 ```
 
 ## Token Storage
+
 Once the user has successfully authenticated, you'll have a JWT and possibly a refresh token that should be stored securely.
 
 Recommendations on secure token storage can be found [here](https://reactnative.dev/docs/security#storing-sensitive-info).
@@ -548,15 +544,15 @@ _Note: Ensure you have already run `npm install` before_
 
 ## SDK API Reference
 
-| Property                        | Type    | Is required | Default        | Description                                                                                                       |
-| ------------------------------- | ------- | ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
-| issuer                          | string  | Yes         |                | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
-| redirectUri                     | string  | Yes         |                | The url that the user will be returned to after authentication                                                    |
-| clientId                        | string  | Yes         |                | The id of your application - get this from the Kinde admin area                                                   |
-| logoutRedirectUri               | string  | No          |                | Where your user will be redirected upon logout                                                                    |
-| scope                           | boolean | No          | openid offline | The scopes to be requested from Kinde                                                                             |
-| additionalParameters            | object  | No          | {}             | Additional parameters that will be passed in the authorization request                                            |
-| additionalParameters - audience | string  | No          |                | The audience claim for the JWT                                                                                    |
+| Property                        | Type    | Is required | Default                      | Description                                                                                                       |
+| ------------------------------- | ------- | ----------- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| issuer                          | string  | Yes         |                              | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
+| redirectUri                     | string  | Yes         |                              | The url that the user will be returned to after authentication                                                    |
+| clientId                        | string  | Yes         |                              | The id of your application - get this from the Kinde admin area                                                   |
+| logoutRedirectUri               | string  | No          |                              | Where your user will be redirected upon logout                                                                    |
+| scope                           | boolean | No          | openid profile email offline | The scopes to be requested from Kinde                                                                             |
+| additionalParameters            | object  | No          | {}                           | Additional parameters that will be passed in the authorization request                                            |
+| additionalParameters - audience | string  | No          |                              | The audience claim for the JWT                                                                                    |
 
 ## KindeSDK methods
 
@@ -575,8 +571,10 @@ _Note: Ensure you have already run `npm install` before_
 | getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                | {orgCodes: \["org_1234", "org_5678"\]}                                               |
 
 ## General tips
+
 Sometimes there will be issues related to caching when you develop React Native.
 There are some recommendations for cleaning the cache:
+
 1. Remove `node_modules`, `yarn.lock` or `package-lock.json`
 2. Clean cache: `yarn cache clean` or `npm cache clean --force`
 3. Make sure you have changed values in `.env` file
@@ -584,19 +582,26 @@ There are some recommendations for cleaning the cache:
 5. Run Metro Bundler: `yarn start --reset-cache` or `npm start --reset-cache`
 
 Assume your project path is `<StarterKit_PATH>`.
+
 ##### With Android:
+
 1. Clean cache:
+
 ```bash
 cd <StarterKit_PATH>/android./gradlew clean
 ```
+
 2. Follow the steps in the above `General tips`.
 
 ##### With iOS:
+
 1. Follow the steps at the above `General tips`.
 2. Clean cache:
+
 ```bash
 cd <StarterKit_PATH>/rm -rf Pods && rm -rd Podfile.lock
 ```
+
 3. Clean build folders on Xcode.
 
 If you need any assistance with getting Kinde connected reach out to us at support@kinde.com.

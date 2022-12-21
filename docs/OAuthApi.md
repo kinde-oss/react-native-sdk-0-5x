@@ -25,11 +25,8 @@ let kindeBearerAuth = defaultClient.authentications['kindeBearerAuth'];
 kindeBearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new @KindeOssReactNativeSdk05x.OAuthApi();
-apiInstance.getUser().then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.getUser();
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 
@@ -68,11 +65,8 @@ let kindeBearerAuth = defaultClient.authentications['kindeBearerAuth'];
 kindeBearerAuth.accessToken = "YOUR ACCESS TOKEN"
 
 let apiInstance = new @KindeOssReactNativeSdk05x.OAuthApi();
-apiInstance.getUserProfileV2().then((data) => {
-  console.log('API called successfully. Returned data: ' + data);
-}, (error) => {
-  console.error(error);
-});
+const data = await apiInstance.getUserProfileV2();
+console.log('API called successfully. Returned data: ' + data);
 
 ```
 
