@@ -2,9 +2,7 @@
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**type** | **String** |  | [optional] 
-**details** | [**CreateUserRequestIdentitiesInnerDetails**](CreateUserRequestIdentitiesInnerDetails.md) |  | [optional] 
-
-
+| Name        | Type                                                                                      | Description | Notes      |
+| ----------- | ----------------------------------------------------------------------------------------- | ----------- | ---------- |
+| **type**    | **String**                                                                                |             | [optional] |
+| **details** | [**CreateUserRequestIdentitiesInnerDetails**](CreateUserRequestIdentitiesInnerDetails.md) |             | [optional] |

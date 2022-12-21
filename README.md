@@ -7,7 +7,8 @@ We only support the [Authorization Code Flow with PKCE](https://oauth.net/2/pkce
 For more information, please visit [https://kinde.com/docs](https://kinde.com/docs)
 
 ## Support Versions
-  -   React Native: 0.50 -> 0.59
+
+-   React Native: 0.50 -> 0.59
 
 ## Installing dependencies
 
@@ -28,7 +29,9 @@ npm install @kinde-oss/react-native-sdk-0-5x --save
 ```
 
 ##### Local development
+
 **Note:** Before you run `npm install`, ensure you already have `.git` folder, or you can generate it with command:
+
 ```shell
 git init
 ```
@@ -46,6 +49,7 @@ npm pack /path/to/<JAVASCRIPT_CLIENT_DIR> && npm install ./@kinde-oss/react-nati
 ```
 
 ## Getting Started
+
 Please follow the [installation](#installation) instruction.
 
 ### Kinde configuration
@@ -316,7 +320,7 @@ handleLogout() {
 
 **\*Note warning:** Before you call the API, please make sure that you've already authenticated. If not, errors will appear there.\*
 
-To access the user information, use the `OAuthApi`, `ApiClient` classes exported from `@kinde-oss/react-native-sdk-0-5x`, then call the `getUser` method of `OAuthApi` instance 
+To access the user information, use the `OAuthApi`, `ApiClient` classes exported from `@kinde-oss/react-native-sdk-0-5x`, then call the `getUser` method of `OAuthApi` instance
 
 ```javascript
 ...
@@ -368,29 +372,36 @@ const permissions = [
     'delete:tasks'
 ];
 ```
+
 We provide helper functions to more easily access permissions:
+
 ```javascript
-this.state.client.getPermission("create:todos");
+this.state.client.getPermission('create:todos');
 // {orgCode: "org_1234", isGranted: true}
 
 this.state.client.getPermissions();
 // {orgCode: "org_1234", permissions: ["create:todos", "update:todos", "read:todos"]}
 ```
+
 A practical example in code might look something like:
+
 ```
 if (this.state.client.getPermission("create:todos").isGranted) {
     // show Create Todo button in UI
 }
 ```
+
 ### Audience
+
 An `audience` is the intended recipient of an access token - for example the API for your application. The audience argument can be passed to the Kinde client to request an audience be added to the provided token.
 
 The audience of a token is the intended recipient of the token.
+
 ```javascript
 ...
 state = {
   ...
-  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI, YOUR_SCOPES, 
+  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI, YOUR_SCOPES,
   {
     audience: 'api.yourapp.com'
   })
@@ -398,16 +409,20 @@ state = {
 }
 ...
 ```
+
 For details on how to connect, see [Register an API](https://kinde.com/docs/developer-tools/register-an-api/)
 
 ### Overriding scope
+
 By default the KindeSDK SDK requests the following scopes:
-- profile
-- email
-- offline
-- openid
+
+-   profile
+-   email
+-   offline
+-   openid
 
 You can override this by passing scope into the KindeSDK
+
 ```javascript
 ...
 state = {
@@ -419,19 +434,23 @@ state = {
 ```
 
 ### Getting claims
+
 We have provided a helper to grab any claim from your id or access tokens. The helper defaults to access tokens:
+
 ```javascript
-this.state.client.getClaim("aud");
+this.state.client.getClaim('aud');
 // ["api.yourapp.com"]
 
-this.state.client.getClaim("given_name", "id_token");
+this.state.client.getClaim('given_name', 'id_token');
 // "David"
 ```
 
-
 ### Organizations Control
+
 #### Create an organization
+
 To have a new organization created within your application, you will need to run a similar function to below:
+
 ```javascript
 <Button title="Create Organization" onPress={this.handleSignIn} />
 ```
@@ -458,35 +477,37 @@ this.state.client.createOrg({org_name: 'Your Organization'});
 ```
 
 #### Sign and sign in to organizations
+
 Kinde has a unique code for every organization. You’ll have to pass this code through when you register a new user. Example function below:
+
 ```javascript
-this.state.client.register({org_code: 'your_org_code'});
+this.state.client.register({ org_code: 'your_org_code' });
 ```
+
 If you want a user to sign into a particular organization, pass this code along with the sign in method.
+
 ```javascript
-this.state.client.login({org_code: 'your_org_code'});
+this.state.client.login({ org_code: 'your_org_code' });
 ```
 
 Following authentication, Kinde provides a json web token (jwt) to your application. Along with the standard information we also include the org_code and the permissions for that organization (this is important as a user can belong to multiple organizations and have different permissions for each). Example of a returned token:
+
 ```json
 {
-	"aud": [],
-	"exp": 1658475930,
-	"iat": 1658472329,
-	"iss": "https://your_subdomain.kinde.com",
-	"jti": "123457890",
-	"org_code": "org_1234",
-	"permissions": ["read:todos", "create:todos"],
-	"scp": [
-		"openid",
-		"profile",
-		"email",
-		"offline"
-	],
-	"sub": "kp:123457890"
+    "aud": [],
+    "exp": 1658475930,
+    "iat": 1658472329,
+    "iss": "https://your_subdomain.kinde.com",
+    "jti": "123457890",
+    "org_code": "org_1234",
+    "permissions": ["read:todos", "create:todos"],
+    "scp": ["openid", "profile", "email", "offline"],
+    "sub": "kp:123457890"
 }
 ```
+
 The id_token will also contain an array of Organizations that a user belongs to - this is useful if you wanted to build out an organization switcher for example.
+
 ```json
 {
 ...
@@ -494,7 +515,9 @@ The id_token will also contain an array of Organizations that a user belongs to 
 ...
 }
 ```
+
 There are two helper functions you can use to extract information:
+
 ```javascript
 this.state.client.getOrganization();
 // {orgCode: "org_1234"}
@@ -504,6 +527,7 @@ this.state.client.getUserOrganizations();
 ```
 
 ## Token Storage
+
 Once the user has successfully authenticated, you'll have a JWT and possibly a refresh token that should be stored securely.
 
 Recommendations on secure token storage can be found [here](https://reactnative.dev/docs/security#storing-sensitive-info).
@@ -519,6 +543,7 @@ npm test
 _Note: Ensure you have already run `npm install` before_
 
 ## SDK API Reference
+
 | Property                        | Type    | Is required | Default        | Description                                                                                                       |
 | ------------------------------- | ------- | ----------- | -------------- | ----------------------------------------------------------------------------------------------------------------- |
 | issuer                          | string  | Yes         |                | Either your Kinde instance url or your custom domain. e.g [https://yourapp.kinde.com](https://yourapp.kinde.com/) |
@@ -527,26 +552,29 @@ _Note: Ensure you have already run `npm install` before_
 | logoutRedirectUri               | string  | No          |                | Where your user will be redirected upon logout                                                                    |
 | scope                           | boolean | No          | openid offline | The scopes to be requested from Kinde                                                                             |
 | additionalParameters            | object  | No          | {}             | Additional parameters that will be passed in the authorization request                                            |
-| additionalParameters - audience | string  | No          |                | The audience claim for the JWT    
+| additionalParameters - audience | string  | No          |                | The audience claim for the JWT                                                                                    |
 
 ## KindeSDK methods
-| Property             | Description                                                                                       | Arguments                        | Usage                                                                         | Sample output                                                                         |
-| -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| login                | Constructs redirect url and sends user to Kinde to sign in                                        | org\_code?: string               | kinde.login();                                                                |                                                                                       |
-| register             | Constructs redirect url and sends user to Kinde to sign up                                        | org\_code?: string               | kinde.register();                                                             |                                                                                       |
-| logout               | Logs the user out of Kinde                                                                        |                                  | kinde.logout();                                                               |                                                                                       |
-| getToken             | Returns the raw Access token from URL after logged from Kinde                                     | url: string                      | kinde.getToken(url);                                                          | eyJhbGciOiJIUzI1...                                                                   |
-| createOrg            | Constructs redirect url and sends user to Kinde to sign up and create a new org for your business | org\_name?: string               | kinde.createOrg(); or kinde.createOrg({org\_name: 'your organization name'}); | redirect                                                                              |
-| getClaim             | Gets a claim from an access or id token                                                           | claim: string, tokenKey?: string | kinde.getClaim('given\_name', 'id\_token');                                   | "David"                                                                               |
-| getPermission        | Returns the state of a given permission                                                           | key: string                      | kinde.getPermission('read:todos');                                            | {orgCode: "org\_1234", isGranted: true}                                               |
-| getPermissions       | Returns all permissions for the current user for the organization they are logged into            |                                  | kinde.getPermissions();                                                       | {orgCode: "org\_1234", permissions: \["create:todos", "update:todos", "read:todos"\]} |
-| getOrganization      | Get details for the organization your user is logged into                                         |                                  | kinde.getOrganization();                                                      | {orgCode: "org\_1234"}                                                                |
-| getUserDetails       | Returns the profile for the current user                                                          |                                  | kinde.getUserDetails();                                                       | {given\_name: "Dave"; id: "abcdef"; family\_name: "Smith"; email: "dave@smith.com"}   |
-| getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                 | {orgCodes: \["org\_1234", "org\_5678"\]}                                              |
+
+| Property             | Description                                                                                       | Arguments                        | Usage                                                                        | Sample output                                                                        |
+| -------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| login                | Constructs redirect url and sends user to Kinde to sign in                                        | org_code?: string                | kinde.login();                                                               |                                                                                      |
+| register             | Constructs redirect url and sends user to Kinde to sign up                                        | org_code?: string                | kinde.register();                                                            |                                                                                      |
+| logout               | Logs the user out of Kinde                                                                        |                                  | kinde.logout();                                                              |                                                                                      |
+| getToken             | Returns the raw Access token from URL after logged from Kinde                                     | url: string                      | kinde.getToken(url);                                                         | eyJhbGciOiJIUzI1...                                                                  |
+| createOrg            | Constructs redirect url and sends user to Kinde to sign up and create a new org for your business | org_name?: string                | kinde.createOrg(); or kinde.createOrg({org_name: 'your organization name'}); | redirect                                                                             |
+| getClaim             | Gets a claim from an access or id token                                                           | claim: string, tokenKey?: string | kinde.getClaim('given_name', 'id_token');                                    | "David"                                                                              |
+| getPermission        | Returns the state of a given permission                                                           | key: string                      | kinde.getPermission('read:todos');                                           | {orgCode: "org_1234", isGranted: true}                                               |
+| getPermissions       | Returns all permissions for the current user for the organization they are logged into            |                                  | kinde.getPermissions();                                                      | {orgCode: "org_1234", permissions: \["create:todos", "update:todos", "read:todos"\]} |
+| getOrganization      | Get details for the organization your user is logged into                                         |                                  | kinde.getOrganization();                                                     | {orgCode: "org_1234"}                                                                |
+| getUserDetails       | Returns the profile for the current user                                                          |                                  | kinde.getUserDetails();                                                      | {given_name: "Dave"; id: "abcdef"; family_name: "Smith"; email: "dave@smith.com"}    |
+| getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                | {orgCodes: \["org_1234", "org_5678"\]}                                               |
 
 ## General tips
+
 Sometimes there will be issues related to caching when you develop React Native.
 There are some recommendations for cleaning the cache:
+
 1. Remove `node_modules`, `yarn.lock` or `package-lock.json`
 2. Clean cache: `yarn cache clean` or `npm cache clean --force`
 3. Make sure you have changed values in `.env` file
@@ -554,19 +582,26 @@ There are some recommendations for cleaning the cache:
 5. Run Metro Bundler: `yarn start --reset-cache` or `npm start --reset-cache`
 
 Assume your project path is `<StarterKit_PATH>`.
+
 ##### With Android:
+
 1. Clean cache:
+
 ```bash
 cd <StarterKit_PATH>/android./gradlew clean
 ```
+
 2. Follow the steps in the above `General tips`.
 
 ##### With iOS:
+
 1. Follow the steps at the above `General tips`.
 2. Clean cache:
+
 ```bash
 cd <StarterKit_PATH>/rm -rf Pods && rm -rd Podfile.lock
 ```
+
 3. Clean build folders on Xcode.
 
 If you need any assistance with getting Kinde connected reach out to us at support@kinde.com.
@@ -575,24 +610,22 @@ If you need any assistance with getting Kinde connected reach out to us at suppo
 
 All URIs are relative to *https://app.kinde.com/api/v1*
 
-Class | Method | HTTP request | Description
------------- | ------------- | ------------- | -------------
-*@kinde-oss/react-native-sdk-0-5x.OAuthApi* | [**getUser**](docs/OAuthApi.md#getUser) | **GET** /oauth2/user_profile | Returns the details of the currently logged in user
-*@kinde-oss/react-native-sdk-0-5x.OAuthApi* | [**getUserProfileV2**](docs/OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user
-*@kinde-oss/react-native-sdk-0-5x.UsersApi* | [**createUser**](docs/UsersApi.md#createUser) | **POST** /user | Creates a user record
-*@kinde-oss/react-native-sdk-0-5x.UsersApi* | [**getUsers**](docs/UsersApi.md#getUsers) | **GET** /users | Returns a paginated list of end-user records for a business
-
+| Class                                       | Method                                                    | HTTP request                    | Description                                                 |
+| ------------------------------------------- | --------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------- |
+| _@kinde-oss/react-native-sdk-0-5x.OAuthApi_ | [**getUser**](docs/OAuthApi.md#getUser)                   | **GET** /oauth2/user_profile    | Returns the details of the currently logged in user         |
+| _@kinde-oss/react-native-sdk-0-5x.OAuthApi_ | [**getUserProfileV2**](docs/OAuthApi.md#getUserProfileV2) | **GET** /oauth2/v2/user_profile | Returns the details of the currently logged in user         |
+| _@kinde-oss/react-native-sdk-0-5x.UsersApi_ | [**createUser**](docs/UsersApi.md#createUser)             | **POST** /user                  | Creates a user record                                       |
+| _@kinde-oss/react-native-sdk-0-5x.UsersApi_ | [**getUsers**](docs/UsersApi.md#getUsers)                 | **GET** /users                  | Returns a paginated list of end-user records for a business |
 
 ## Documentation for Models
 
- - [@kinde-oss/react-native-sdk-0-5x.CreateUser200Response](docs/CreateUser200Response.md)
- - [@kinde-oss/react-native-sdk-0-5x.CreateUserRequest](docs/CreateUserRequest.md)
- - [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInner](docs/CreateUserRequestIdentitiesInner.md)
- - [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInnerDetails](docs/CreateUserRequestIdentitiesInnerDetails.md)
- - [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestProfile](docs/CreateUserRequestProfile.md)
- - [@kinde-oss/react-native-sdk-0-5x.User](docs/User.md)
- - [@kinde-oss/react-native-sdk-0-5x.UserIdentity](docs/UserIdentity.md)
- - [@kinde-oss/react-native-sdk-0-5x.UserIdentityResult](docs/UserIdentityResult.md)
- - [@kinde-oss/react-native-sdk-0-5x.UserProfile](docs/UserProfile.md)
- - [@kinde-oss/react-native-sdk-0-5x.UserProfileV2](docs/UserProfileV2.md)
-
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUser200Response](docs/CreateUser200Response.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequest](docs/CreateUserRequest.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInner](docs/CreateUserRequestIdentitiesInner.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestIdentitiesInnerDetails](docs/CreateUserRequestIdentitiesInnerDetails.md)
+-   [@kinde-oss/react-native-sdk-0-5x.CreateUserRequestProfile](docs/CreateUserRequestProfile.md)
+-   [@kinde-oss/react-native-sdk-0-5x.User](docs/User.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserIdentity](docs/UserIdentity.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserIdentityResult](docs/UserIdentityResult.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserProfile](docs/UserProfile.md)
+-   [@kinde-oss/react-native-sdk-0-5x.UserProfileV2](docs/UserProfileV2.md)

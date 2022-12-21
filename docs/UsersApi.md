@@ -2,12 +2,10 @@
 
 All URIs are relative to *https://app.kinde.com/api/v1*
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**createUser**](UsersApi.md#createUser) | **POST** /user | Creates a user record
-[**getUsers**](UsersApi.md#getUsers) | **GET** /users | Returns a paginated list of end-user records for a business
-
-
+| Method                                   | HTTP request   | Description                                                 |
+| ---------------------------------------- | -------------- | ----------------------------------------------------------- |
+| [**createUser**](UsersApi.md#createUser) | **POST** /user | Creates a user record                                       |
+| [**getUsers**](UsersApi.md#getUsers)     | **GET** /users | Returns a paginated list of end-user records for a business |
 
 ## createUser
 
@@ -15,7 +13,7 @@ Method | HTTP request | Description
 
 Creates a user record
 
-Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user 
+Creates a user record and optionally zero or more identities for the user. An example identity could be the email address of the user
 
 ### Example
 
@@ -37,10 +35,9 @@ console.log('API called successfully. Returned data: ' + data);
 
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **createUserRequest** | [**CreateUserRequest**](CreateUserRequest.md)| The details of the user to create | [optional] 
+| Name                  | Type                                          | Description                       | Notes      |
+| --------------------- | --------------------------------------------- | --------------------------------- | ---------- |
+| **createUserRequest** | [**CreateUserRequest**](CreateUserRequest.md) | The details of the user to create | [optional] |
 
 ### Return type
 
@@ -52,9 +49,8 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: application/json
-- **Accept**: application/json
-
+-   **Content-Type**: application/json
+-   **Accept**: application/json
 
 ## getUsers
 
@@ -62,7 +58,7 @@ Name | Type | Description  | Notes
 
 Returns a paginated list of end-user records for a business
 
-The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter. 
+The returned list can be sorted by full name or email address in ascending or descending order. The number of records to return at a time can also be controlled using the page_size query string parameter.
 
 ### Example
 
@@ -87,13 +83,12 @@ console.log('API called successfully. Returned data: ' + data);
 
 ### Parameters
 
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **sort** | **String**| Describes the field and order to sort the result by | [optional] 
- **pageSize** | **Number**| The number of items to return | [optional] 
- **userId** | **Number**| The id of the user to filter by | [optional] 
- **nextToken** | **String**| A string to get the next page of results if there are more results | [optional] 
+| Name          | Type       | Description                                                        | Notes      |
+| ------------- | ---------- | ------------------------------------------------------------------ | ---------- |
+| **sort**      | **String** | Describes the field and order to sort the result by                | [optional] |
+| **pageSize**  | **Number** | The number of items to return                                      | [optional] |
+| **userId**    | **Number** | The id of the user to filter by                                    | [optional] |
+| **nextToken** | **String** | A string to get the next page of results if there are more results | [optional] |
 
 ### Return type
 
@@ -105,6 +100,5 @@ Name | Type | Description  | Notes
 
 ### HTTP request headers
 
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
+-   **Content-Type**: Not defined
+-   **Accept**: application/json
