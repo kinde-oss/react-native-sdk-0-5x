@@ -531,6 +531,11 @@ this.state.client.getUserOrganizations();
 // {orgCodes: ["org_1234", "org_abcd"]}
 ```
 
+## Token Storage
+Once the user has successfully authenticated, you'll have a JWT and possibly a refresh token that should be stored securely.
+
+Recommendations on secure token storage can be found [here](https://reactnative.dev/docs/security#storing-sensitive-info).
+
 ## How to run test
 
 The simplest way to run the JavaScript test suite is by using the following command at the root of your React Native checkout:
@@ -568,6 +573,31 @@ _Note: Ensure you have already run `npm install` before_
 | getOrganization      | Get details for the organization your user is logged into                                         |                                  | kinde.getOrganization();                                                     | {orgCode: "org_1234"}                                                                |
 | getUserDetails       | Returns the profile for the current user                                                          |                                  | kinde.getUserDetails();                                                      | {given_name: "Dave"; id: "abcdef"; family_name: "Smith"; email: "dave@smith.com"}    |
 | getUserOrganizations | Gets an array of all organizations the user has access to                                         |                                  | kinde.getUserOrganizations();                                                | {orgCodes: \["org_1234", "org_5678"\]}                                               |
+
+## General tips
+Sometimes there will be issues related to caching when you develop React Native.
+There are some recommendations for cleaning the cache:
+1. Remove `node_modules`, `yarn.lock` or `package-lock.json`
+2. Clean cache: `yarn cache clean` or `npm cache clean --force`
+3. Make sure you have changed values in `.env` file
+4. Trying to install packages again: `yarn install` or `npm install`
+5. Run Metro Bundler: `yarn start --reset-cache` or `npm start --reset-cache`
+
+Assume your project path is `<StarterKit_PATH>`.
+##### With Android:
+1. Clean cache:
+```bash
+cd <StarterKit_PATH>/android./gradlew clean
+```
+2. Follow the steps in the above `General tips`.
+
+##### With iOS:
+1. Follow the steps at the above `General tips`.
+2. Clean cache:
+```bash
+cd <StarterKit_PATH>/rm -rf Pods && rm -rd Podfile.lock
+```
+3. Clean build folders on Xcode.
 
 If you need any assistance with getting Kinde connected reach out to us at support@kinde.com.
 
