@@ -3,7 +3,7 @@
 React Native Client for `@kinde-oss/react-native-sdk-0-5x`
 Provides endpoints to manage your Kinde Businesses
 
-We only support the [Authorization Code Flow with PKCE](https://oauth.net/2/pkce/).
+We only support the recommended [Authorization Code Flow with PKCE](https://oauth.net/2/pkce/).
 For more information, please visit [https://kinde.com/docs](https://kinde.com/docs)
 
 ## Support Versions
@@ -20,41 +20,17 @@ Follow [the installation instructions for your chosen OS](https://archive.reactn
 
 #### npm
 
-To publish the library as a [npm](https://www.npmjs.com/), please follow the procedure in ["Publishing npm packages"](https://docs.npmjs.com/getting-started/publishing-npm-packages).
-
-Then install it via:
+The SDK can be installed with `npm` or `yarn` but we will use `npm` for code samples.
 
 ```shell
 npm install @kinde-oss/react-native-sdk-0-5x --save
 ```
 
-##### Local development
-
-**Note:** Before you run `npm install`, ensure you already have `.git` folder, or you can generate it with command:
-
-```shell
-git init
-```
-
-To use the library locally without publishing to a remote npm registry, first install the dependencies by changing into the directory containing `package.json` (and this README). Let's call this `JAVASCRIPT_CLIENT_DIR`. Then run:
-
-```shell
-npm install
-```
-
-To use this SDK, switch to the directory you want to use your `@kinde-oss/react-native-sdk-0-5x` from, and run:
-
-```shell
-npm pack /path/to/<JAVASCRIPT_CLIENT_DIR> && npm install ./@kinde-oss/react-native-sdk-0-5x-<version>.tgz
-```
-
 ## Getting Started
-
-Please follow the [installation](#installation) instruction.
 
 ### Kinde configuration
 
-On the Kinde web app navigate to Settings in the left menu, then select App keys and find the Callbacks input field.
+On the Kinde web app navigate to `Settings` in the left menu, then select `Applications` and select the `Frontend app`. Scroll down to the `Callback URLs` section.
 
 Here you want to put in the callback URLs for your React Native app, which should look something like this:
 
@@ -73,7 +49,7 @@ If you would like to use our Environments feature as part of your development pr
 
 #### Environment variables
 
-Put these variables in your .env file. You can find these variables on your Kinde Settings -> App keys page.
+Put these variables in your .env file. You can find these variables on the same page as where you set the callback URLs.
 
 -   `KINDE_ISSUER_URL` - your Kinde domain
 -   `KINDE_POST_CALLBACK_URL` - After the user authenticates we will callback to this address. Make sure this URL is under your allowed callback URLs
@@ -100,13 +76,13 @@ componentDidMount() {
     Linking.getInitialURL()
       .then((url) => {
         if (url) {
-          // Need to implement
+          // Your code here
         }
       })
       .catch((err) => console.error("An error occurred", err));
   Linking.addEventListener('url', (event) => {
       if (event.url) {
-        // Need to implement
+        // Your code here
       }
     })
 }
@@ -187,7 +163,12 @@ import { KindeSDK } from '@kinde-oss/react-native-sdk-0-5x';
 ...
 state = {
   ...
-  client: new KindeSDK(YOUR_KINDE_ISSUER, YOUR_KINDE_REDIRECT_URI, YOUR_KINDE_CLIENT_ID, YOUR_KINDE_LOGOUT_REDIRECT_URI)
+  client: new KindeSDK(
+    YOUR_KINDE_ISSUER,
+    YOUR_KINDE_REDIRECT_URI,
+    YOUR_KINDE_CLIENT_ID,
+    YOUR_KINDE_LOGOUT_REDIRECT_URI
+)
   ...
 }
 ...
