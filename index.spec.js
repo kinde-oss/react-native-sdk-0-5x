@@ -26,9 +26,9 @@ global.FormData = FormDataMock;
 const configuration = {
     issuer: 'https://myhost.kinde.com',
     redirectUri: 'myapp://myhost.kinde.com/kinde_callback',
-    clientId: 'spa@live',
+    clientId: 'test@live',
     logoutRedirectUri: 'myapp://myhost.kinde.com/kinde_callback',
-    scope: 'openid offline',
+    scope: 'openid profile email offline',
     authorizationEndpoint: 'https://myhost.kinde.com/oauth2/auth',
     tokenEndpoint: 'https://myhost.kinde.com/oauth2/token',
     logoutEndpoint: 'https://myhost.kinde.com/logout',
@@ -46,8 +46,8 @@ const fakeUserProfile = {
 };
 
 const fakePayloadFromDecodeToken = {
-    azp: 'spa@live',
-    iss: 'https://trung.kinde.com',
+    azp: 'test@live',
+    iss: 'https://myhost.kinde.com',
     org_code: 'org_e5f28e1676d',
     org_codes: ['org_e5f28e1676d'],
     permissions: ['read:profile', 'read:email']
@@ -80,8 +80,8 @@ jest.mock('./src/SDK/Utils', () => ({
 
 jest.mock('jwt-decode', () =>
     jest.fn().mockReturnValue({
-        azp: 'spa@live',
-        iss: 'https://trung.kinde.com',
+        azp: 'test@live',
+        iss: 'https://myhost.kinde.com',
         org_code: 'org_e5f28e1676d',
         org_codes: ['org_e5f28e1676d'],
         permissions: ['read:profile', 'read:email']

@@ -33,11 +33,11 @@ class ApiClient {
      * Overrides the default value set in spec file if present
      * @param {String} basePath
      */
-    constructor(basePath = 'https://app.kinde.com/api/v1') {
+    constructor(basePath = 'https://your_kinde_domain.kinde.com/api/v1') {
         /**
          * The base URL against which to resolve every API call's (relative) path.
          * @type {String}
-         * @default https://app.kinde.com/api/v1
+         * @default https://your_kinde_domain.kinde.com/api/v1
          */
         this.basePath = basePath.replace(/\/+$/, '');
 
@@ -647,7 +647,7 @@ class ApiClient {
                     businessName: {
                         description:
                             'Business Name created in the Kinde Console',
-                        default_value: 'app'
+                        default_value: 'your_kinde_domain'
                     }
                 }
             }
