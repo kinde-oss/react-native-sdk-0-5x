@@ -1,6 +1,6 @@
 # @KindeOssReactNativeSdk05x.OAuthApi
 
-All URIs are relative to *https://app.kinde.com/api/v1*
+All URIs are relative to _https://{businessName}.kinde.com/_
 
 | Method                                               | HTTP request                    | Description                                         |
 | ---------------------------------------------------- | ------------------------------- | --------------------------------------------------- |
