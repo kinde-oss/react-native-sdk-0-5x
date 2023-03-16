@@ -405,7 +405,7 @@ class ApiClient {
      * @param {String} apiBasePath base path defined in the operation/path level to override the default one
      * @returns {Promise} A {@link https://www.promisejs.org/|Promise} object.
      */
-    callApi(
+    async callApi(
         path,
         httpMethod,
         pathParams,
@@ -431,7 +431,7 @@ class ApiClient {
         }
 
         // Set access token from Storage
-        const accessToken = Storage.getAccessToken();
+        const accessToken = await Storage.getAccessToken();
         if (accessToken) {
             request.set({ Authorization: 'Bearer ' + accessToken });
         }

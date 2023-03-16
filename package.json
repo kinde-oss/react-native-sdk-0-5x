@@ -36,6 +36,7 @@
         "crypto-js": "3.3.0",
         "jwt-decode": "^3.1.2",
         "qs": "^6.11.0",
+        "react-native-keychain": "3.0",
         "superagent": "^7.0.2",
         "url-parse": "^1.5.10"
     },
@@ -75,7 +76,8 @@
         "rimraf": "^3.0.2"
     },
     "peerDependencies": {
-        "react-native": "^0.0.0-0 || 0.50 - 0.59 || 1000.0.0"
+        "react-native": "^0.0.0-0 || 0.50 - 0.59 || 1000.0.0",
+        "react-native-keychain": "3.0"
     },
     "files": [
         "dist"

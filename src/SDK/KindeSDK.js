@@ -93,7 +93,22 @@ export default class KindeSDK {
      * @param url - The URL that the user is redirected to after the authorization code is generated.
      * @returns A promise that resolves to a responseJson object.
      */
-    getToken(url) {
+    async getToken(url = null) {
+        // Checking for case token still valid
+        const token = await Storage.getToken();
+        if (token && !url) {
+            if (this.isAuthenticated) {
+                return token;
+            }
+
+            const formData = new FormData();
+            formData.append('client_id', this.clientId);
+            formData.append('client_secret', this.clientSecret);
+            formData.append('grant_type', 'refresh_token');
+            formData.append('refresh_token', token.refresh_token);
+            return this.fetchToken(formData);
+        }
+
         if (this.checkIsUnAuthenticated()) {
             throw new UnAuthenticatedException();
         }
@@ -122,6 +137,10 @@ export default class KindeSDK {
             formData.append('code_verifier', codeVerifier);
         }
 
+        return this.fetchToken(formData);
+    }
+
+    fetchToken(formData) {
         return new Promise(async (resolve, reject) => {
             const response = await fetch(this.tokenEndpoint, {
                 method: 'POST',
@@ -137,15 +156,8 @@ export default class KindeSDK {
                 return;
             }
 
-            this.saveUserDetails(dataResponse.id_token);
-            Storage.setAccessToken(dataResponse.access_token);
-            Storage.setIdToken(dataResponse.id_token);
+            await Storage.setToken(dataResponse);
             this.updateAuthStatus(authStatusConstants.AUTHENTICATED);
-
-            const now = new Date().getTime();
-            const expiredAt = now + dataResponse.expires_in * 1000;
-            Storage.setExpiredAt(expiredAt);
-
             resolve(dataResponse);
         });
     }
@@ -179,9 +191,9 @@ export default class KindeSDK {
         return Linking.openURL(URLParsed.toString());
     }
 
-    cleanUp() {
+    async cleanUp() {
         this.updateAuthStatus(authStatusConstants.UNAUTHENTICATED);
-        return Storage.clear();
+        return Storage.clearAll();
     }
 
     updateAuthStatus(_authStatus) {
@@ -202,31 +214,16 @@ export default class KindeSDK {
         return false;
     }
 
-    getUserDetails() {
+    async getUserDetails() {
         return Storage.getUserProfile();
     }
 
-    saveUserDetails(idToken) {
-        if (!idToken || typeof idToken !== 'string') {
-            Storage.removeItem('userProfile');
-            return;
-        }
-
-        const token = jwt_decode(idToken);
-        Storage.setUserProfile({
-            id: token.sub,
-            given_name: token.given_name,
-            family_name: token.family_name,
-            email: token.email
-        });
-    }
-
-    getClaims(tokenType = 'accessToken') {
+    async getClaims(tokenType = 'accessToken') {
         if (!['accessToken', 'id_token'].includes(tokenType)) {
             throw new UnexpectedException('tokenType');
         }
 
-        const token = Storage.getItem(tokenType);
+        const token = await Storage.getTokenType(tokenType);
         if (!token) {
             throw new UnAuthenticatedException();
         }
@@ -234,20 +231,20 @@ export default class KindeSDK {
         return jwt_decode(token);
     }
 
-    getClaim(keyName, tokenType = 'accessToken') {
+    async getClaim(keyName, tokenType = 'accessToken') {
         return this.getClaims(tokenType)[keyName];
     }
 
-    getPermissions() {
-        const claims = this.getClaims();
+    async getPermissions() {
+        const claims = await this.getClaims();
         return {
             orgCode: claims['org_code'],
             permissions: claims['permissions']
         };
     }
 
-    getPermission(permission) {
-        const allClaims = this.getClaims();
+    async getPermission(permission) {
+        const allClaims = await this.getClaims();
         const permissions = allClaims['permissions'];
         return {
             orgCode: allClaims['org_code'],
@@ -255,26 +252,26 @@ export default class KindeSDK {
         };
     }
 
-    getOrganization() {
+    async getOrganization() {
+        const orgCode = await this.getClaim('org_code');
         return {
-            orgCode: this.getClaim('org_code')
+            orgCode
         };
     }
 
-    getUserOrganizations() {
+    async getUserOrganizations() {
+        const orgCodes = await this.getClaim('org_codes', 'id_token');
         return {
-            orgCodes: this.getClaim('org_codes', 'id_token')
+            orgCodes
         };
     }
 
     get isAuthenticated() {
-        if (this.checkIsUnAuthenticated()) {
-            return false;
-        }
-
-        const timeExpired = Number(Storage.getExpiredAt());
-        const now = new Date().getTime();
-        return timeExpired > now;
+        return (async () => {
+            const timeExpired = await Storage.getExpiredAt();
+            const now = new Date().getTime();
+            return timeExpired * 1000 > now;
+        })();
     }
 
     get authorizationEndpoint() {

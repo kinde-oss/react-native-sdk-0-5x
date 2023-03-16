@@ -20,12 +20,28 @@ Follow [the installation instructions for your chosen OS](https://archive.reactn
 
 ## Installation
 
-#### npm
-
 The SDK can be installed with `npm` or `yarn` but we will use `npm` for code samples.
 
 ```shell
 npm install @kinde-oss/react-native-sdk-0-5x --save
+```
+
+Also, we're using the [react-native-keychain](https://github.com/oblador/react-native-keychain) to store your sensitive data. After successfully installing the SDK, you need to link the package to the SDK:
+
+```shell
+npx react-native link react-native-keychain
+```
+
+### Android
+
+Checking `MainApplication.java` to verify the package was added
+
+### iOS
+
+To install iOS dependencies:
+
+```shell
+cd ios && pod install
 ```
 
 ## Getting Started
