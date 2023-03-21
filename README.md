@@ -38,11 +38,13 @@ Checking `MainApplication.java` to verify the package was added
 
 ### iOS
 
-To install iOS dependencies:
-
-```shell
-cd ios && pod install
-```
+If `react-native-keychain` not linked, you need to install it manually.
+- Click to `Build Phases` tab
+- Choose `Link Binary With Libraries`
+- Click `+` in bottom
+- **Add Other...** => ***Add Files...*** => ***node_modules/react-native-keychain/RNKeychain.xcodeproj***
+- Then, you need to add `libRNKeychain.a`
+- Clean and rebuild
 
 ## Getting Started
 
