@@ -11,7 +11,9 @@
  *
  */
 
+import jwtDecode from 'jwt-decode';
 import BaseStore from './base';
+import KindeStorage from './KindeStorage';
 
 /**
  * The Storage SDK module.
@@ -22,30 +24,35 @@ import BaseStore from './base';
 class Storage extends BaseStore {
     constructor() {
         super();
+        this.storage = new KindeStorage();
     }
 
-    getAccessToken() {
-        return this.getItem('accessToken');
+    async getToken() {
+        const { password } = await this.storage.getItem();
+        return password ? JSON.parse(password) : null;
     }
 
-    setAccessToken(newAccessToken) {
-        return this.setItem('accessToken', this.convertString(newAccessToken));
+    async setToken(token) {
+        return this.storage.setItem(token);
     }
 
-    getIdToken() {
-        return this.getItem('id_token');
+    async getTokenType(type) {
+        const token = await this.getToken();
+        const newType = type === 'id_token' ? type : 'access_token';
+        return token?.[newType] ?? null;
     }
 
-    setIdToken(newIdToken) {
-        return this.setItem('id_token', this.convertString(newIdToken));
+    async getAccessToken() {
+        return this.getTokenType('access_token');
     }
 
-    getExpiredAt() {
-        return this.getItem('expired_at');
+    async getIdToken() {
+        return this.getTokenType('id_token');
     }
 
-    setExpiredAt(expiredAt) {
-        return this.setItem('expired_at', expiredAt || 0);
+    async getExpiredAt() {
+        const token = await this.getAccessToken();
+        return token ? jwtDecode(token)['exp'] : 0;
     }
 
     getState() {
@@ -75,15 +82,20 @@ class Storage extends BaseStore {
         return this.setItem('authStatus', this.convertString(newAuthStatus));
     }
 
-    getUserProfile() {
-        const userProfile = this.getItem('userProfile');
-        return userProfile && !['undefined', 'null'].includes(userProfile)
-            ? JSON.parse(userProfile)
-            : null;
+    async clearAll() {
+        this.clear();
+        return this.storage.clear();
     }
 
-    setUserProfile(newUserProfile) {
-        return this.setItem('userProfile', this.convertString(newUserProfile));
+    async getUserProfile() {
+        const token = await this.getIdToken();
+        const payload = token ? jwtDecode(token) : {};
+        return {
+            id: payload['sub'] ?? '',
+            given_name: payload['given_name'] ?? '',
+            family_name: payload['family_name'] ?? '',
+            email: payload['email'] ?? ''
+        };
     }
 
     convertString(str) {

@@ -20,13 +20,31 @@ Follow [the installation instructions for your chosen OS](https://archive.reactn
 
 ## Installation
 
-#### npm
-
 The SDK can be installed with `npm` or `yarn` but we will use `npm` for code samples.
 
 ```shell
 npm install @kinde-oss/react-native-sdk-0-5x --save
 ```
+
+Also, we're using the [react-native-keychain](https://github.com/oblador/react-native-keychain) to store your sensitive data. After successfully installing the SDK, you need to link the package to the SDK:
+
+```shell
+npx react-native link react-native-keychain
+```
+
+### Android
+
+Checking `MainApplication.java` to verify the package was added
+
+### iOS
+
+If `react-native-keychain` not linked, you need to install it manually.
+- Click to `Build Phases` tab
+- Choose `Link Binary With Libraries`
+- Click `+` in bottom
+- **Add Other...** => ***Add Files...*** => ***node_modules/react-native-keychain/RNKeychain.xcodeproj***
+- Then, you need to add `libRNKeychain.a`
+- Clean and rebuild
 
 ## Getting Started
 
@@ -269,7 +287,7 @@ Or simply use `isAuthenticated` from the SDK to determine whether the user is au
 
 ```javascript
 async handleCallback(url) {
-  if (this.state.client.isAuthenticated) {
+  if (await this.state.client.isAuthenticated) {
     const token = await this.state.client.getToken(url);
     console.log('token here', token);
   }
@@ -356,17 +374,18 @@ const permissions = [
 We provide helper functions to more easily access permissions:
 
 ```javascript
-this.state.client.getPermission('create:todos');
+await this.state.client.getPermission('create:todos');
 // {orgCode: "org_1234", isGranted: true}
 
-this.state.client.getPermissions();
+await this.state.client.getPermissions();
 // {orgCode: "org_1234", permissions: ["create:todos", "update:todos", "read:todos"]}
 ```
 
 A practical example in code might look something like:
 
-```
-if (this.state.client.getPermission("create:todos").isGranted) {
+```javascript
+const permission = await this.state.client.getPermission('create:todos');
+if (permission.isGranted) {
     // show Create Todo button in UI
 }
 ```
@@ -430,10 +449,10 @@ state = {
 We have provided a helper to grab any claim from your id or access tokens. The helper defaults to access tokens:
 
 ```javascript
-this.state.client.getClaim('aud');
+await this.state.client.getClaim('aud');
 // ["api.yourapp.com"]
 
-this.state.client.getClaim('given_name', 'id_token');
+await this.state.client.getClaim('given_name', 'id_token');
 // "David"
 ```
 
@@ -501,27 +520,25 @@ The id_token will also contain an array of Organizations that a user belongs to 
 
 ```json
 {
-...
-"org_codes": ["org_1234", "org_4567"]
-...
+  ...
+  "org_codes": ["org_1234", "org_4567"]
+  ...
 }
 ```
 
 There are two helper functions you can use to extract information:
 
 ```javascript
-this.state.client.getOrganization();
+await this.state.client.getOrganization();
 // {orgCode: "org_1234"}
 
-this.state.client.getUserOrganizations();
+await this.state.client.getUserOrganizations();
 // {orgCodes: ["org_1234", "org_abcd"]}
 ```
 
 ## Token Storage
 
 Once the user has successfully authenticated, you'll have a JWT and possibly a refresh token that should be stored securely.
-
-Recommendations on secure token storage can be found [here](https://reactnative.dev/docs/security#storing-sensitive-info).
 
 ## How to run test
 
