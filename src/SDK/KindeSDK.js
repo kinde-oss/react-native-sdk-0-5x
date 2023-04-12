@@ -97,16 +97,12 @@ export default class KindeSDK {
         // Checking for case token still valid
         const token = await Storage.getToken();
         if (token && !url) {
-            if (this.isAuthenticated) {
+            const isAuthenticated = await this.isAuthenticated;
+            if (isAuthenticated) {
                 return token;
             }
 
-            const formData = new FormData();
-            formData.append('client_id', this.clientId);
-            formData.append('client_secret', this.clientSecret);
-            formData.append('grant_type', 'refresh_token');
-            formData.append('refresh_token', token.refresh_token);
-            return this.fetchToken(formData);
+            return this.refreshToken(token.refresh_token);
         }
 
         if (this.checkIsUnAuthenticated()) {
@@ -160,6 +156,20 @@ export default class KindeSDK {
             this.updateAuthStatus(authStatusConstants.AUTHENTICATED);
             resolve(dataResponse);
         });
+    }
+
+    /**
+     * Sends a request to the authentication server to refresh the tokens using the provided refresh token.
+     * @param {String} refresh_token - The refresh token issued to the user.
+     * @return A promise.
+     */
+    refreshToken(refresh_token) {
+        const formData = new FormData();
+        formData.append('client_id', this.clientId);
+        formData.append('client_secret', this.clientSecret);
+        formData.append('grant_type', 'refresh_token');
+        formData.append('refresh_token', refresh_token);
+        return this.fetchToken(formData);
     }
 
     /**
