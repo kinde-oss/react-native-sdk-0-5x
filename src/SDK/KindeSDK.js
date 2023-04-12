@@ -97,7 +97,8 @@ export default class KindeSDK {
         // Checking for case token still valid
         const token = await Storage.getToken();
         if (token && !url) {
-            if (this.isAuthenticated) {
+            const isAuthenticated = await this.isAuthenticated;
+            if (isAuthenticated) {
                 return token;
             }
 
