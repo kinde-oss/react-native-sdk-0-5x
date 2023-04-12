@@ -10,6 +10,7 @@
     },
     "bugs": "https://github.com/@kinde-oss/react-native-sdk-0-5x",
     "main": "dist/index.js",
+    "module": "src/index.js",
     "scripts": {
         "build": "rimraf dist && babel src -d dist",
         "prepare": "npm run build && husky install",
@@ -80,7 +81,8 @@
         "react-native-keychain": "3.0"
     },
     "files": [
-        "dist"
+        "dist",
+        "src"
     ],
     "lint-staged": {
         "**/*.{js,jsx}": [
